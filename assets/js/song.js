@@ -1,134 +1,157 @@
-(function () {
-  'use strict';
+/* ── Parâmetros da URL ── */
+const params = new URLSearchParams(location.search);
+const fileUrl = params.get('file');
+const titleParam  = params.get('title')  || 'Cifra';
+const artistParam = params.get('artist') || '';
+const keyParam    = params.get('key')    || '';
 
-  const elLoading   = document.getElementById('loading-msg');
-  const elError     = document.getElementById('error-msg');
-  const elErrorText = document.getElementById('error-text');
-  const elContent   = document.getElementById('song-content');
-  const elToolbar   = document.getElementById('toolbar');
-  const elTitle     = document.getElementById('song-title');
-  const elArtist    = document.getElementById('song-artist');
-  const elKeyBadge  = document.getElementById('song-key-display');
-  const elSheet     = document.getElementById('chord-sheet');
-  const elTransVal  = document.getElementById('transpose-value');
-  const elKeyLabel  = document.getElementById('current-key-label');
-  const btnUp       = document.getElementById('btn-up');
-  const btnDown     = document.getElementById('btn-down');
-  const btnReset    = document.getElementById('btn-reset');
-  const btnShare    = document.getElementById('btn-share');
-  const btnDownload = document.getElementById('btn-download');
+/* ── Elementos ── */
+const elKeyLabel  = document.getElementById('current-key-label');
+const elTransVal  = document.getElementById('transpose-value');
+const elSheet     = document.getElementById('chord-sheet');
+const elContent   = document.getElementById('song-content');
+const elLoading   = document.getElementById('loading-msg');
+const elError     = document.getElementById('error-msg');
+const elErrorText = document.getElementById('error-text');
+const elToolbar   = document.getElementById('toolbar');
+const elBtnDown   = document.getElementById('btn-down');
+const elBtnUp     = document.getElementById('btn-up');
+const elBtnReset  = document.getElementById('btn-reset');
+const elBtnShare  = document.getElementById('btn-share');
+const elBtnDl     = document.getElementById('btn-download');
+const elBtnFontDown = document.getElementById('btn-font-down');
+const elBtnFontUp   = document.getElementById('btn-font-up');
+const elFontDisp    = document.getElementById('font-size-display');
 
-  let song        = null;
-  let transpose   = 0;
-  let fileUrl     = '';
-  let originalKey = '';
+/* ── Estado ── */
+const FONT_SIZES = [10, 12, 14, 16, 18, 20, 22, 24, 26];
+const FONT_KEY   = 'chordsheets_fontsize';
+const TRANS_KEY  = `chordsheets_transpose_${fileUrl}`;
 
-  const params = new URLSearchParams(location.search);
-  fileUrl   = params.get('file') || '';
-  transpose = parseInt(params.get('t') || '0', 10);
-  if (isNaN(transpose)) transpose = 0;
+let song      = null;   // ChordSheetJS Song object
+let transpose = 0;
+let fontIdx   = 4;      // índice padrão = 16px
 
-  function updateUrl() {
-    const p = new URLSearchParams({ file: fileUrl, t: transpose });
-    history.replaceState(null, '', '?' + p.toString());
+/* ── Tamanho de fonte ── */
+function loadFontPref() {
+  const saved = localStorage.getItem(FONT_KEY);
+  if (saved !== null) {
+    const idx = FONT_SIZES.indexOf(Number(saved));
+    if (idx !== -1) fontIdx = idx;
   }
+  applyFont();
+}
 
-  function clampTranspose(val) {
-    val = ((val % 12) + 12) % 12;
-    return val > 6 ? val - 12 : val;
-  }
+function applyFont() {
+  const size = FONT_SIZES[fontIdx];
+  document.documentElement.style.setProperty('--chord-size', size + 'px');
+  elFontDisp.textContent = size;
+  localStorage.setItem(FONT_KEY, size);
+}
 
-  function render() {
-    if (!song) return;
-    const target = transpose !== 0 ? song.transpose(transpose) : song;
-    elSheet.innerHTML = new ChordSheetJS.HtmlDivFormatter().format(target);
-    elTransVal.textContent = transpose > 0 ? '+' + transpose : String(transpose);
-    if (originalKey) {
-      const newKey = transposeKey(originalKey, transpose);
-      elKeyLabel.textContent = newKey !== originalKey
-        ? 'Tom: ' + originalKey + ' → ' + newKey
-        : 'Tom: ' + originalKey;
-    }
-  }
+elBtnFontDown.addEventListener('click', () => {
+  if (fontIdx > 0) { fontIdx--; applyFont(); }
+});
+elBtnFontUp.addEventListener('click', () => {
+  if (fontIdx < FONT_SIZES.length - 1) { fontIdx++; applyFont(); }
+});
 
-  function transposeKey(keyStr, semitones) {
-    if (!semitones) return keyStr;
+/* ── Transpose ── */
+function loadTransposePref() {
+  const saved = localStorage.getItem(TRANS_KEY);
+  if (saved !== null) transpose = Number(saved) || 0;
+}
+
+function saveTransposePref() {
+  localStorage.setItem(TRANS_KEY, transpose);
+}
+
+function renderSheet() {
+  if (!song) return;
+
+  const transposed = song.transpose(transpose);
+  const formatter  = new ChordSheetJS.HtmlDivFormatter();
+  elSheet.innerHTML = formatter.format(transposed);
+
+  elTransVal.textContent = (transpose >= 0 ? '+' : '') + transpose;
+
+  // Calcula tom atual a partir do keyParam
+  if (keyParam) {
     try {
-      const match = keyStr.match(/^([A-G][#b]?)(.*)/);
-      if (!match) return keyStr;
-      const chord = ChordSheetJS.Chord.parse(match[1]);
-      if (!chord) return keyStr;
-      return chord.transpose(semitones).toString() + match[2];
-    } catch (_) { return keyStr; }
-  }
-
-  function showError(msg) {
-    elLoading.style.display = 'none';
-    elError.style.display   = 'block';
-    elErrorText.textContent = msg;
-  }
-
-  function showContent() {
-    elLoading.style.display = 'none';
-    elContent.style.display = 'block';
-    elToolbar.style.display = 'flex';
-  }
-
-  async function loadSong() {
-    if (!fileUrl) { showError('Nenhum arquivo especificado na URL.'); return; }
-    let rawText;
-    try {
-      const res = await fetch(fileUrl);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      rawText = await res.text();
-    } catch (err) {
-      showError('Não foi possível carregar: ' + fileUrl);
-      return;
+      const key = ChordSheetJS.Chord.parse(keyParam);
+      if (key) {
+        const currentKey = key.transpose(transpose);
+        elKeyLabel.textContent = currentKey.toString();
+      }
+    } catch (_) {
+      elKeyLabel.textContent = '';
     }
-    try {
-      song = new ChordSheetJS.ChordProParser().parse(rawText);
-    } catch (err) {
-      showError('Erro ao interpretar: ' + (err.message || err));
-      return;
-    }
-
-    const title  = song.title  || 'Sem título';
-    const artist = song.artist || '';
-    originalKey  = song.key    || '';
-
-    document.title       = title + (artist ? ' — ' + artist : '');
-    elTitle.textContent  = title;
-    elArtist.textContent = artist;
-
-    if (originalKey) {
-      elKeyBadge.textContent   = 'Tom: ' + originalKey;
-      elKeyBadge.style.display = 'inline';
-    }
-
-    btnDownload.href     = fileUrl;
-    btnDownload.download = fileUrl.split('/').pop() || 'cifra.pro';
-
-    showContent();
-    render();
   }
+}
 
-  btnUp.addEventListener('click', function () { transpose = clampTranspose(transpose + 1); updateUrl(); render(); });
-  btnDown.addEventListener('click', function () { transpose = clampTranspose(transpose - 1); updateUrl(); render(); });
-  btnReset.addEventListener('click', function () { transpose = 0; updateUrl(); render(); });
+elBtnUp.addEventListener('click',    () => { transpose++; saveTransposePref(); renderSheet(); });
+elBtnDown.addEventListener('click',  () => { transpose--; saveTransposePref(); renderSheet(); });
+elBtnReset.addEventListener('click', () => { transpose = 0; saveTransposePref(); renderSheet(); });
 
-  btnShare.addEventListener('click', async function () {
-    if (navigator.share) {
-      try { await navigator.share({ url: location.href, title: document.title }); } catch (_) {}
+/* ── Compartilhar ── */
+elBtnShare.addEventListener('click', async () => {
+  const shareData = {
+    title: titleParam,
+    text:  `${titleParam}${artistParam ? ' — ' + artistParam : ''}`,
+    url:   location.href,
+  };
+  try {
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      await navigator.share(shareData);
     } else {
-      try {
-        await navigator.clipboard.writeText(location.href);
-        const orig = btnShare.textContent;
-        btnShare.textContent = '✓ Copiado!';
-        setTimeout(function () { btnShare.textContent = orig; }, 2000);
-      } catch (_) {}
+      await navigator.clipboard.writeText(location.href);
+      elBtnShare.textContent = 'Link copiado!';
+      setTimeout(() => elBtnShare.textContent = '⬆ Compartilhar', 2000);
     }
-  });
+  } catch (e) {
+    console.warn('share failed', e);
+  }
+});
 
-  loadSong();
-})();
+/* ── Inicialização ── */
+function showError(msg) {
+  elLoading.style.display  = 'none';
+  elContent.style.display  = 'none';
+  elToolbar.style.display  = 'none';
+  elError.style.display    = 'block';
+  elErrorText.textContent  = msg;
+}
 
+function showContent() {
+  elLoading.style.display = 'none';
+  elError.style.display   = 'none';
+  elContent.style.display = 'block';
+  elToolbar.style.display = 'block';
+}
+
+if (!fileUrl) {
+  showError('Nenhuma música especificada.');
+} else {
+  document.title = titleParam + ' — Cifras';
+  loadFontPref();
+  loadTransposePref();
+
+  fetch(fileUrl)
+    .then(r => {
+      if (!r.ok) throw new Error(`Arquivo não encontrado: ${fileUrl}`);
+      return r.text();
+    })
+    .then(text => {
+      const parser = new ChordSheetJS.ChordProParser();
+      song = parser.parse(text);
+
+      // Download do arquivo original
+      const blob = new Blob([text], { type: 'text/plain' });
+      elBtnDl.href     = URL.createObjectURL(blob);
+      elBtnDl.download = fileUrl.split('/').pop()?.replace(/\.pro$/i, '.cho') || 'cifra.cho';
+
+      renderSheet();
+      showContent();
+    })
+    .catch(err => showError(err.message));
+}
