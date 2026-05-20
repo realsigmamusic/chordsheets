@@ -1,348 +1,338 @@
-/* ── Reset mínimo ── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* ── Tokens ── */
+/* ---------- Tokens ---------- */
 :root {
-  --bg:         #1a1a1a;
-  --bg-raised:  #222222;
-  --bg-subtle:  #2a2a2a;
-  --border:     #333333;
-  --text:       #e8e4dc;
-  --text-muted: #888888;
-  --accent:     #f0c040;
-  --danger:     #e05555;
-  --radius:     6px;
-  --max-width:  720px;
+  --bg:        #0f0f0f;
+  --surface:   #1a1a1a;
+  --border:    #2a2a2a;
+  --text:      #e8e8e8;
+  --muted:     #888;
+  --accent:    #c8a96e;        /* dourado quente — único acento de cor */
+  --accent-dim: rgba(200, 169, 110, 0.12);
+  --radius:    10px;
+  --font-ui:   'Georgia', 'Times New Roman', serif; /* caractere musical */
+  --font-mono: 'Courier New', Courier, monospace;   /* cifras */
+
+  /* tamanho da fonte da cifra (ajustado pelo usuário) */
+  --chord-size: 16px;
 }
 
-/* ── Base ── */
-html, body {
-  height: 100%;
-}
+/* ---------- Reset mínimo ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
 
 body {
-  background-color: var(--bg);
+  background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+  font-family: var(--font-ui);
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
 
-button {
-  cursor: pointer;
-  font: inherit;
-}
-
-/* ── Layout ── */
-.container {
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 0.6rem;
-}
-
-/* ── Navbar ── */
+/* ---------- Navbar ---------- */
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  padding: 0 1.25rem;
+  height: 3.5rem;
+  background: rgba(15, 15, 15, 0.92);
+  backdrop-filter: blur(0.75rem);
   border-bottom: 1px solid var(--border);
-  background-color: var(--bg);
-}
-
-.navbar-brand {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
 }
 
 .navbar-back {
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  font-size: 1.2rem;
+  font-size: 1.75rem;
   line-height: 1;
-  padding: 0.25rem;
+  color: var(--accent);
+  padding: 0.25rem 0.5rem 0.25rem 0;
+  margin-right: 0.25rem;
+  transition: opacity .15s;
 }
+.navbar-back:hover { opacity: .7; }
 
-.navbar-back:hover {
+.navbar-brand {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: .02rem;
   color: var(--text);
+  flex: 1;
 }
 
 .song-count {
-  margin-left: auto;
-  font-size: 0.8rem;
-  color: var(--text-muted);
+  font-size: 1rem;
+  color: var(--muted);
 }
 
-/* ── Search ── */
+/* ---------- Container ---------- */
+.container {
+  max-width: 50rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 7.5rem;
+}
+
+/* ---------- Busca ---------- */
 .search-wrap {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background-color: var(--bg-raised);
-  margin: 1.25rem 0;
-  overflow: hidden;
-}
-
-.search-wrap:focus-within {
-  border-color: var(--accent);
+  position: relative;
+  margin-bottom: 28px;
 }
 
 .search-icon {
-  padding: 0 0.75rem;
-  color: var(--text-muted);
+  position: absolute;
+  left: 1.75rem;
+  top: 50%;
+  transform: translateY(-50%);
   font-size: 1rem;
-  display: flex;
-  align-items: center;
+  pointer-events: none;
+  color: var(--muted);
 }
 
 .search-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text);
-  font-size: 1rem;
-  padding: 0.75rem 0.75rem 0.75rem 0;
-}
-
-.search-input::placeholder {
-  color: var(--text-muted);
-}
-
-/* ── Song list ── */
-.song-list {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  overflow: hidden;
+  color: var(--text);
+  font-size: 1rem;
+  font-family: var(--font-ui);
+  outline: none;
+  transition: border-color .2s;
+}
+.search-input::placeholder { color: var(--muted); }
+.search-input:focus { border-color: var(--accent); }
+
+/* ---------- Lista de músicas ---------- */
+.section-label {
+  font-size: 1rem;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
 }
 
-.song-item {
+.song-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.song-card {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.85rem 1rem;
-  border-bottom: 1px solid var(--border);
-  background-color: var(--bg-raised);
-  transition: background-color 0.1s;
+  padding: 0.8rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  gap: 0.8rem;
+  transition: border-color .15s, background .15s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
-
-.song-item:last-child {
-  border-bottom: none;
-}
-
-.song-item:hover, .song-item:focus {
-  background-color: var(--bg-subtle);
+.song-card:hover,
+.song-card:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent-dim);
   outline: none;
 }
 
-.song-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text);
-}
+.song-card-text { flex: 1; min-width: 0; }
 
-.song-artist {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-.song-key {
-  font-size: 0.75rem;
-  font-family: monospace;
-  color: var(--accent);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 2px 8px;
+.song-card-title {
+  font-size: 1.5rem;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-card-artist {
+  font-size: 1rem;
+  color: var(--muted);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-card-key {
+  color: var(--accent);
+}
+
+/* Seta de navegação */
+.song-card-arrow {
   flex-shrink: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1;
 }
 
-/* ── No results ── */
-.no-results {
-  display: none;
-  text-align: center;
-  color: var(--text-muted);
-  padding: 3rem 1rem;
-  font-size: 0.95rem;
-}
-
-/* ── Song page: header ── */
-.song-header {
-  display: none;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  margin: 1.25rem 0 1rem;
-}
-
-.song-header h1 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.song-header .artist {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  margin-top: 4px;
-}
-
-.key-badge {
+/* ---------- Botão "ver todas" ---------- */
+.btn-show-all {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--muted);
   font-size: 0.8rem;
-  font-family: monospace;
-  color: var(--accent);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 3px 10px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  display: none;
+  text-align: center;
+  transition: border-color .15s, color .15s;
+}
+.btn-show-all:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- Sem resultados ---------- */
+.no-results {
+  text-align: center;
+  color: var(--muted);
+  padding: 3rem 0;
+  font-size: 1rem;
 }
 
-/* ── Transpose ── */
+/* ---------- Página da música ---------- */
+
+/* Linha de transpose */
 .transpose-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin: 1rem 0rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
   flex-wrap: wrap;
 }
 
 .transpose-label {
-  font-size: 1rem;
-  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: .08rem;
+  color: var(--muted);
+  margin-right: 0.25rem;
 }
 
 .btn-circle {
-  width: 40px;
-  height: 40px;
+  width: 2.25rem;
+  height: 2.25rem;
   border-radius: 50%;
   border: 1px solid var(--border);
-  background-color: var(--bg-raised);
-  color: var(--text);
-  font-size: 1.3rem;
+  background: var(--bg);
+  font-size: 1.25rem;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.1s, color 0.1s;
+  transition: border-color .15s, color .15s;
+  flex-shrink: 0;
 }
-
-.btn-circle:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
+.btn-circle:hover { border-color: var(--accent); color: var(--accent); }
 
 .transpose-value {
-  font-family: monospace;
-  font-size: 0.8rem;
-  color: var(--accent);
-  min-width: 36px;
+  min-width: 2rem;
   text-align: center;
+  font-size: 1rem;
 }
 
 .btn-reset {
-  border: 1px solid var(--border);
-  background-color: var(--bg-raised);
-  color: var(--text-muted);
-  border-radius: var(--radius);
-  padding: 4px 12px;
-  font-size: 0.82rem;
-  transition: border-color 0.1s, color 0.1s;
-}
-
-.btn-reset:hover {
-  border-color: var(--accent);
-  color: var(--text);
-}
-
-.key-label {
-  margin-left: auto;
   font-size: 1rem;
-  color: var(--text-muted);
+  color: var(--muted);
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  transition: color .15s, border-color .15s;
 }
+.btn-reset:hover { color: var(--accent); border-color: var(--accent); }
 
-/* ── Loading / Error ── */
-.state-msg {
-  text-align: center;
-  color: var(--text-muted);
-  padding: 3rem 1rem;
-}
 
-.state-msg.hidden {
-  display: none;
-}
-
-/* ── Toolbar (fixed bottom) ── */
+/* ---------- Toolbar (rodapé fixo) ---------- */
 .toolbar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  display: none;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  background-color: var(--bg);
+  z-index: 100;
+  background: rgba(15, 15, 15, 0.95);
+  backdrop-filter: blur(12px);
   border-top: 1px solid var(--border);
-}
-
-.toolbar.visible {
-  display: flex;
+  padding: 0.75rem 1.25rem;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
 }
 
 .toolbar-inner {
-  display: flex;
-  gap: 0.75rem;
-  width: 100%;
+  max-width: 50rem;
   margin: 0 auto;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 }
 
-.btn-toolbar {
-  flex: 1;
-  padding: 0.75rem;
+/* Grupo de tamanho de fonte */
+.font-size-group {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-right: auto;
+}
+
+.btn-font {
+  width: 2.25rem;
+  height: 2.25rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background-color: var(--bg-raised);
-  color: var(--text);
-  font-size: 0.9rem;
+  border-radius: 0.5rem;
+  background: var(--surface);
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  transition: border-color 0.1s, color 0.1s;
-  text-decoration: none;
+  transition: border-color .15s, color .15s;
+}
+.btn-font:hover { border-color: var(--accent); color: var(--accent); }
+
+.font-size-label {
+  font-size: 1rem;
+  color: var(--muted);
+  min-width: 2rem;
+  text-align: center;
 }
 
-.btn-toolbar:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+/* Botões de ação */
+.btn-toolbar {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 1rem;
+  text-align: center;
+  color: var(--text);
+  transition: border-color .15s, background .15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+.btn-toolbar:hover { border-color: var(--accent); background: var(--accent-dim); }
+
+/* ---------- Estados ---------- */
+.state-msg {
+  text-align: center;
+  padding: 3rem 0;
+  color: var(--muted);
+  font-size: 1rem;
 }
 
-/* ── Song content padding (espaço pro toolbar fixo) ── */
-.song-content {
-  padding-bottom: 5rem;
-}
-
-.song-content.hidden {
-  display: none;
-}
+/* ---------- Responsivo ----------
+@media (max-width: 480px) {
+  .container { padding: 20px 16px 120px; }
+  .navbar { padding: 0 16px; }
+  .toolbar { padding: 10px 16px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+  .btn-toolbar { font-size: 13px; padding: 10px 12px; }
+} */
