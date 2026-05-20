@@ -5,6 +5,7 @@
   --border:    #2a2a2a;
   --text:      #e8e8e8;
   --muted:     #888;
+  --danger:    red;
   --accent:    #c8a96e;        /* dourado quente — único acento de cor */
   --accent-dim: rgba(200, 169, 110, 0.12);
   --radius:    10px;
@@ -79,12 +80,12 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 /* ---------- Busca ---------- */
 .search-wrap {
   position: relative;
-  margin-bottom: 28px;
+  margin-bottom: 0.75rem;
 }
 
 .search-icon {
   position: absolute;
-  left: 1.75rem;
+  left: 0.8rem;
   top: 50%;
   transform: translateY(-50%);
   font-size: 1rem;
@@ -108,41 +109,18 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .search-input:focus { border-color: var(--accent); }
 
 /* ---------- Lista de músicas ---------- */
-.section-label {
-  font-size: 1rem;
-  letter-spacing: 0.1rem;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 1rem;
-}
-
 .song-list {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.song-card {
-  display: flex;
-  align-items: center;
-  padding: 0.8rem 1rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  gap: 0.8rem;
-  transition: border-color .15s, background .15s;
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-}
 .song-card:hover,
 .song-card:focus-visible {
   border-color: var(--accent);
   background: var(--accent-dim);
   outline: none;
 }
-
-.song-card-text { flex: 1; min-width: 0; }
 
 .song-card-title {
   font-size: 1.5rem;
@@ -164,30 +142,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   color: var(--accent);
 }
 
-/* Seta de navegação */
-.song-card-arrow {
-  flex-shrink: 0;
-  color: var(--muted);
-  font-size: 1rem;
-  line-height: 1;
-}
-
-/* ---------- Botão "ver todas" ---------- */
-.btn-show-all {
-  display: block;
-  width: 100%;
-  margin-top: 10px;
-  padding: 0.75rem;
-  background: transparent;
-  border: 1px dashed var(--border);
-  border-radius: var(--radius);
-  color: var(--muted);
-  font-size: 0.8rem;
-  text-align: center;
-  transition: border-color .15s, color .15s;
-}
-.btn-show-all:hover { border-color: var(--accent); color: var(--accent); }
-
 /* ---------- Sem resultados ---------- */
 .no-results {
   text-align: center;
@@ -197,8 +151,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 
 /* ---------- Página da música ---------- */
-
-/* Linha de transpose */
 .transpose-row {
   display: flex;
   align-items: center;
@@ -211,12 +163,11 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   flex-wrap: wrap;
 }
 
-.transpose-label {
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: .08rem;
-  color: var(--muted);
-  margin-right: 0.25rem;
+.font-size-group {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-right: auto;
 }
 
 .btn-circle {
@@ -274,14 +225,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   align-items: center;
 }
 
-/* Grupo de tamanho de fonte */
-.font-size-group {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  margin-right: auto;
-}
-
 .btn-font {
   width: 2.25rem;
   height: 2.25rem;
@@ -328,11 +271,3 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   color: var(--muted);
   font-size: 1rem;
 }
-
-/* ---------- Responsivo ----------
-@media (max-width: 480px) {
-  .container { padding: 20px 16px 120px; }
-  .navbar { padding: 0 16px; }
-  .toolbar { padding: 10px 16px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
-  .btn-toolbar { font-size: 13px; padding: 10px 12px; }
-} */
