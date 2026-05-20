@@ -1,67 +1,273 @@
-.chord-sheet {
-  margin-top: 1rem;
+/* ---------- Tokens ---------- */
+:root {
+  --bg:        #0f0f0f;
+  --surface:   #1a1a1a;
+  --border:    #2a2a2a;
+  --text:      #e8e8e8;
+  --muted:     #888;
+  --danger:    red;
+  --accent:    #c8a96e;        /* dourado quente — único acento de cor */
+  --accent-dim: rgba(200, 169, 110, 0.12);
+  --radius:    10px;
+  --font-ui:   'Georgia', 'Times New Roman', serif; /* caractere musical */
+  --font-mono: 'Courier New', Courier, monospace;   /* cifras */
+
+  /* tamanho da fonte da cifra (ajustado pelo usuário) */
+  --chord-size: 16px;
+}
+
+/* ---------- Reset mínimo ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-ui);
-  font-size: var(--chord-size);
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
 }
 
-h1.title {
-  color: var(--accent);
-  margin: 1rem 0 0 0;
-}
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
 
-h2.subtitle {
-  color: var(--muted);
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-.paragraph {
-  margin-bottom: 1.5rem;
-}
-
-.paragraph.chorus {
-  border-left: 0.2rem solid var(--accent);
-  background-color: var(--border);
-  padding-left: 0.5rem;
-}
-
-.paragraph.chorus h3.label {
-  margin-left: -0.5rem;
-  width: calc(100% + 0.5rem);
-}
-
-h3.label, .comment {
-  font-size: var(--chord-size);
-  font-weight: bold;
-  color: var(--accent);
-  background-color: var(--surface);
-  padding: 0.25rem 0.5rem;
-  margin: 0 0 0.5rem 0;
-  display: block;
-  width: 100%;
-}
-
-.row {
+/* ---------- Navbar ---------- */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1.25rem;
+  height: 3.5rem;
+  background: rgba(15, 15, 15, 0.92);
+  backdrop-filter: blur(0.75rem);
+  border-bottom: 1px solid var(--border);
 }
 
-.column {
+.navbar-back {
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--accent);
+  padding: 0.25rem 0.5rem 0.25rem 0;
+  margin-right: 0.25rem;
+  transition: opacity .15s;
+}
+.navbar-back:hover { opacity: .7; }
+
+.navbar-brand {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: .02rem;
+  color: var(--text);
+  flex: 1;
+}
+
+.song-count {
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+/* ---------- Container ---------- */
+.container {
+  max-width: 50rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 7.5rem;
+}
+
+/* ---------- Busca ---------- */
+.search-wrap {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  pointer-events: none;
+  color: var(--muted);
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 1rem;
+  font-family: var(--font-ui);
+  outline: none;
+  transition: border-color .2s;
+}
+.search-input::placeholder { color: var(--muted); }
+.search-input:focus { border-color: var(--accent); }
+
+/* ---------- Lista de músicas ---------- */
+.song-list {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
-.chord {
-  min-height: calc(var(--chord-size) + 0.5rem);
-  padding-right: 0.5rem;
-  font-weight: bold;
+.song-card:hover,
+.song-card:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  outline: none;
+}
+
+.song-card-title {
+  font-size: 1.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-card-artist {
+  font-size: 1rem;
+  color: var(--muted);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-card-key {
   color: var(--accent);
-  margin-bottom: -0.5rem;
 }
 
-.lyrics {
-  min-height: 1.5rem;
-  white-space: pre;
-  word-break: keep-all;
+/* ---------- Sem resultados ---------- */
+.no-results {
+  text-align: center;
+  color: var(--muted);
+  padding: 3rem 0;
+  font-size: 1rem;
+}
+
+/* ---------- Página da música ---------- */
+.transpose-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.font-size-group {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-right: auto;
+}
+
+.btn-circle {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 1.25rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color .15s, color .15s;
+  flex-shrink: 0;
+}
+.btn-circle:hover { border-color: var(--accent); color: var(--accent); }
+
+.transpose-value {
+  min-width: 2rem;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.btn-reset {
+  font-size: 1rem;
+  color: var(--muted);
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  transition: color .15s, border-color .15s;
+}
+.btn-reset:hover { color: var(--accent); border-color: var(--accent); }
+
+
+/* ---------- Toolbar (rodapé fixo) ---------- */
+.toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(15, 15, 15, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  padding: 0.75rem 1.25rem;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+.toolbar-inner {
+  max-width: 50rem;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.btn-font {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color .15s, color .15s;
+}
+.btn-font:hover { border-color: var(--accent); color: var(--accent); }
+
+.font-size-label {
+  font-size: 1rem;
+  color: var(--muted);
+  min-width: 2rem;
+  text-align: center;
+}
+
+/* Botões de ação */
+.btn-toolbar {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 1rem;
+  text-align: center;
+  color: var(--text);
+  transition: border-color .15s, background .15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+.btn-toolbar:hover { border-color: var(--accent); background: var(--accent-dim); }
+
+/* ---------- Estados ---------- */
+.state-msg {
+  text-align: center;
+  padding: 3rem 0;
+  color: var(--muted);
+  font-size: 1rem;
 }
