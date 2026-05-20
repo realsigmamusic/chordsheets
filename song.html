@@ -22,12 +22,16 @@
   <div id="song-content" style="display:none">
 
     <div class="transpose-row">
-      <span class="transpose-label">Tom</span>
       <button id="btn-down"  class="btn-circle">−</button>
       <span   id="transpose-value" class="transpose-value">0</span>
       <button id="btn-up"    class="btn-circle">+</button>
-      <button id="btn-reset" class="btn-reset">resetar</button>
+      <button id="btn-reset" class="btn-reset">×</button>
       <span   id="current-key-label" class="key-label"></span>
+      <div class="font-size-group">
+        <button class="btn-font" id="btn-font-down" title="Diminuir fonte">A−</button>
+        <span class="font-size-label" id="font-size-display">16</span>
+        <button class="btn-font" id="btn-font-up" title="Aumentar fonte">A+</button>
+      </div>
     </div>
 
     <div id="chord-sheet"></div>
@@ -38,17 +42,9 @@
 <!-- Toolbar fixa -->
 <div id="toolbar" class="toolbar" style="display:none">
   <div class="toolbar-inner">
-
-    <!-- Controle de tamanho de fonte -->
-    <div class="font-size-group">
-      <button class="btn-font" id="btn-font-down" title="Diminuir fonte">A−</button>
-      <span   class="font-size-label" id="font-size-display">16</span>
-      <button class="btn-font" id="btn-font-up"   title="Aumentar fonte">A+</button>
-    </div>
-
     <!-- Compartilhar e Download -->
-    <button id="btn-share"    class="btn-toolbar">⬆ Compartilhar</button>
-    <a      id="btn-download" href="#" download class="btn-toolbar">⬇ .cho</a>
+    <button id="btn-share" class="btn-toolbar">⬆ Compartilhar</button>
+    <a id="btn-download" href="#" download class="btn-toolbar">⬇ Download</a>
 
   </div>
 </div>
