@@ -1,7 +1,3 @@
-/* ─────────────────────────────────────────────
-   app.js — Index page
-   ───────────────────────────────────────────── */
-
 (function () {
   'use strict';
 
@@ -33,15 +29,12 @@
     songList.innerHTML = songs.map(function (song) {
       const url      = 'song.html?file=' + encodeURIComponent(song.file);
       const keyBadge = song.key
-        ? '<span class="song-key">' + escapeHtml(song.key) + '</span>'
+        ? '<span class="song-card-key">' + escapeHtml(song.key) + '</span>'
         : '';
 
       return '<a href="' + url + '" class="song-item">'
-        + '<div>'
-        +   '<div class="song-title">' + escapeHtml(song.title) + '</div>'
-        +   '<div class="song-artist">' + escapeHtml(song.artist) + '</div>'
-        + '</div>'
-        + keyBadge
+        +   '<h1 class="song-card-title">' + escapeHtml(song.title) + ' - ' + keyBadge + '</h1>'
+        +   '<span class="song-card-artist">' + escapeHtml(song.artist) + '</span>'
         + '</a>';
     }).join('');
   }
