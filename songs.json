@@ -3,13 +3,18 @@
     "title": "Oceano",
     "artist": "Djavan",
     "key": "D",
-    "file": "songs/djavan/oceano.pro"
+    "file": "songs/djavan/oceano.cho"
   },
   {
     "title": "Sublime",
     "artist": "Fhop Music",
     "key": "D",
-    "file": "songs/fhop-music/sublime.pro"
+    "file": "songs/fhop-music/sublime.cho"
+  },
+  {
+    "title": "Eu e Minha Casa",
+    "artist": "Julliany Souza",
+    "key": "F",
+    "file": "songs/julliany-souza/eu-e-minha-casa.cho"
   }
 ]
-
