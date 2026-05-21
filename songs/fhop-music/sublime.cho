@@ -1,25 +1,65 @@
 {title: Sublime}
 {subtitle: Fhop Music}
 {artist: Fhop Music}
+{composer: Caio Freitas, Débora Rabelo}
+{album: Meia Noite}
+{copyright: Fhop Music}
+{year: 2025}
 {key: D}
 {time: 4/4}
+{tempo: 60}
 
 {start_of_part: Introdução}
 [D][Bm][A][G]
 {end_of_part}
 
 {start_of_verse: Verso}
-[D]Quem é como Tu,[Bm7] Je[A2]sus Não [G]há ninguém além de Ti[D] Que é manso e[Bm7] humilde ass[A2]im Não [G]há ninguém igual a [G7M]Ti [A2] [D/F#] Não [Bm7]há [A2]
+[D]Quem é como Tu,[Bm7] Je[A2]sus 
+Não [G]há ninguém além de Ti[D] 
+Que é manso e[Bm7] humilde ass[A2]im 
+Não [G]há ninguém igual a 
+[G7M]Ti [A2] [D/F#] Não [Bm7]há [A2]
 {end_of_verse}
 
 {start_of_chorus: Refrão}
-Maravi[G7M]lhoso, admi[A2]rável Tão su[D/F#]blime, glori[Bm7]oso [A2] Tua pre[G7M]sença é mais dese[A2]jável Do que o [D/F#]ouro Melhor que a [Bm7]vida é o teu[A2] amor [G7M]
+Maravi[G7M]lhoso, admi[A2]rável
+Tão su[D/F#]blime, glori[Bm7]oso [A2]
+Tua pre[G7M]sença é mais dese[A2]jável
+Do que o [D/F#]ouro, melhor que a [Bm7]vida 
+É o teu[A2] amor
 {end_of_chorus}
 
-{start_of_part: Solo}
-[G][A][D/F#][Bm][A][G][A][D/F#][Bm][A]
+{start_of_verse: Verso}
+[D]Quem é como Tu,[Bm7] Je[A2]sus 
+Não [G]há ninguém além de Ti[D] 
+Que é manso e[Bm7] humilde ass[A2]im 
+Não [G]há ninguém igual a 
+[G7M]Ti [A2] [D/F#] Não [Bm7]há [A2]
+{end_of_verse}
+
+{start_of_chorus: Refrão}
+Maravi[G7M]lhoso, admi[A2]rável
+Tão su[D/F#]blime, glori[Bm7]oso [A2]
+Tua pre[G7M]sença é mais dese[A2]jável
+Do que o [D/F#]ouro, melhor que a [Bm7]vida 
+É o teu[A2] amor
+{end_of_chorus}
+
+{start_of_part: Solo x2}
+[G][A][D/F#][Bm][A]
 {end_of_part}
 
-{start_of_bridge: Ponte}
-[Em]Ah, como es[D]pero o di[A]a Em que ve[Em]rei a [D]face do meu am[A]ado [Em]Ah, como espero o dia [D] [A] Em que a ale[Em]gria en[D]fim será com[A]pleta
+{start_of_bridge: Ponte x2}
+[Em]Ah, como es[D]pero o di[A]a
+Em que ve[Em]rei a [D]face do meu am[A]ado
+[Em]Ah, como es[D]pero o di[A]a
+Em que a ale[Em]gria en[D]fim será com[A]pleta
 {end_of_bridge}
+
+{start_of_chorus: Refrão}
+Maravi[G7M]lhoso, admi[A2]rável
+Tão su[D/F#]blime, glori[Bm7]oso [A2]
+Tua pre[G7M]sença é mais dese[A2]jável
+Do que o [D/F#]ouro, melhor que a [Bm7]vida 
+É o teu[A2] amor
+{end_of_chorus}
