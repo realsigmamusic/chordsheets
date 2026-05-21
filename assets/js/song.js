@@ -6,6 +6,7 @@ const artistParam = params.get('artist') || '';
 const keyParam    = params.get('key')    || '';
 
 /* ── Elementos ── */
+const elSongHeader = document.getElementById('song-header');
 const elKeyLabel  = document.getElementById('current-key-label');
 const elTransVal  = document.getElementById('transpose-value');
 const elSheet     = document.getElementById('chord-sheet');
@@ -64,6 +65,66 @@ function loadTransposePref() {
 
 function saveTransposePref() {
   localStorage.setItem(TRANS_KEY, transpose);
+}
+
+/* ── Renderiza metadados do ChordPro ── */
+function renderMetadata(song) {
+  if (!song || !song.metadata) return;
+
+  const meta = song.metadata;
+  let html = '';
+
+  // Artista
+  if (meta.artist) {
+    html += `<span class="song-meta-item"><strong>Artista:</strong> ${escapeHtml(meta.artist)}</span>`;
+  }
+
+  // Compositor
+  if (meta.composer) {
+    html += `<span class="song-meta-item"><strong>Compositor:</strong> ${escapeHtml(meta.composer)}</span>`;
+  }
+
+  // Álbum
+  if (meta.album) {
+    html += `<span class="song-meta-item"><strong>Álbum:</strong> ${escapeHtml(meta.album)}</span>`;
+  }
+
+  // Ano
+  if (meta.year) {
+    html += `<span class="song-meta-item"><strong>Ano:</strong> ${escapeHtml(meta.year)}</span>`;
+  }
+
+  // Copyright
+  if (meta.copyright) {
+    html += `<span class="song-meta-item"><strong>Copyright:</strong> ${escapeHtml(meta.copyright)}</span>`;
+  }
+
+  // Tom (key)
+  if (meta.key) {
+    html += `<span class="song-meta-item"><strong>Tom:</strong> ${escapeHtml(meta.key)}</span>`;
+  }
+
+  // Tempo
+  if (meta.tempo) {
+    html += `<span class="song-meta-item"><strong>bpm:</strong> ${escapeHtml(meta.tempo)}</span>`;
+  }
+
+  // Compasso (time)
+  if (meta.time) {
+    html += `<span class="song-meta-item"><strong>Compasso:</strong> ${escapeHtml(meta.time)}</span>`;
+  }
+
+  elSongHeader.innerHTML = html;
+}
+
+/* ── Utilitário ── */
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 function renderSheet() {
@@ -144,6 +205,9 @@ if (!fileUrl) {
     .then(text => {
       const parser = new ChordSheetJS.ChordProParser();
       song = parser.parse(text);
+
+      // Renderiza metadados
+      renderMetadata(song);
 
       // Download do arquivo original
       const blob = new Blob([text], { type: 'text/plain' });

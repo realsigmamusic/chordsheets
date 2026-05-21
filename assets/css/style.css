@@ -1,18 +1,33 @@
 /* ---------- Tokens ---------- */
+/*
 :root {
-  --bg:        #0f0f0f;
-  --surface:   #1a1a1a;
-  --border:    #2a2a2a;
-  --text:      #e8e8e8;
-  --muted:     #888;
-  --danger:    red;
-  --accent:    #c8a96e;        /* dourado quente — único acento de cor */
+  --bg:         #0f0f0f;
+  --surface:    #1a1a1a;
+  --border:     #2a2a2a;
+  --text:       #e8e8e8;
+  --muted:      #888;
+  --danger:     red;
+  --accent:     #c8a96e;
   --accent-dim: rgba(200, 169, 110, 0.12);
   --radius:    10px;
-  --font-ui:   'Georgia', 'Times New Roman', serif; /* caractere musical */
-  --font-mono: 'Courier New', Courier, monospace;   /* cifras */
+  --font-ui:   'Georgia', 'Times New Roman', serif;
+  --font-mono: 'Courier New', Courier, monospace;
+  --chord-size: 16px;
+}
+*/
 
-  /* tamanho da fonte da cifra (ajustado pelo usuário) */
+:root {
+  --bg:        #f8f9fa;
+  --surface:   #e5e5e5;
+  --border:    #dedede;
+  --text:      #212529;
+  --muted:     #6c757d;
+  --danger:    #dc3545;
+  --accent:    #0056b3;
+  --accent-dim: rgba(0, 86, 179, 0.08); 
+  --radius:    10px;
+  --font-ui:   'Georgia', 'Times New Roman', serif;
+  --font-mono: 'Courier New', Courier, monospace;
   --chord-size: 16px;
 }
 
@@ -42,7 +57,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   gap: 0.75rem;
   padding: 0 1.25rem;
   height: 3.5rem;
-  background: rgba(15, 15, 15, 0.92);
+  background: var(--surface);
   backdrop-filter: blur(0.75rem);
   border-bottom: 1px solid var(--border);
 }
@@ -210,7 +225,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(15, 15, 15, 0.95);
+  background: var(--surface);
   backdrop-filter: blur(12px);
   border-top: 1px solid var(--border);
   padding: 0.75rem 1.25rem;
