@@ -1,11 +1,5 @@
 [
   {
-    "title": "Oceano",
-    "artist": "Djavan",
-    "key": "D",
-    "file": "songs/djavan/oceano.cho"
-  },
-  {
     "title": "Sublime",
     "artist": "Fhop Music",
     "key": "D",
@@ -18,9 +12,21 @@
     "file": "songs/julliany-souza/eu-e-minha-casa.cho"
   },
   {
-    "title": "Vento no Litoral",
-    "artist": "Legião Urbana",
-    "key": "Am",
-    "file": "songs/legiao-urbana/vento-no-litoral.cho"
+    "title": "A Boa Parte",
+    "artist": "Fhop Music",
+    "key": "E",
+    "file": "songs/fhop-music/a-boa-parte.cho"
+  },
+  {
+    "title": "Senhor Formoso És",
+    "artist": "Marcos Góes",
+    "key": "E",
+    "file": "songs/marcos-goes/senhor-formoso-es.cho"
+  },
+  {
+    "title": "Tudo é Perda",
+    "artist": "Felipe Rodrigues",
+    "key": "Db",
+    "file": "songs/felipe-rodrigues/tudo-e-perda.cho"
   }
 ]
