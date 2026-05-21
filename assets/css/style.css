@@ -1,24 +1,8 @@
 /* ---------- Tokens ---------- */
-/*
-:root {
-  --bg:         #0f0f0f;
-  --surface:    #1a1a1a;
-  --border:     #2a2a2a;
-  --text:       #e8e8e8;
-  --muted:      #888;
-  --danger:     red;
-  --accent:     #c8a96e;
-  --accent-dim: rgba(200, 169, 110, 0.12);
-  --radius:    10px;
-  --font-ui:   'Georgia', 'Times New Roman', serif;
-  --font-mono: 'Courier New', Courier, monospace;
-  --chord-size: 16px;
-}
-*/
-
 :root {
   --bg:        #f8f9fa;
   --surface:   #e5e5e5;
+  --chorus:    #f1f1f1;
   --border:    #dedede;
   --text:      #212529;
   --muted:     #6c757d;
@@ -209,14 +193,35 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 
 .btn-reset {
   font-size: 1rem;
-  color: var(--muted);
   padding: 0.25rem 0.5rem;
   border: 1px solid var(--border);
   border-radius: 0.3rem;
   transition: color .15s, border-color .15s;
+  background: var(--bg);
+  border-radius: 50%;
 }
 .btn-reset:hover { color: var(--accent); border-color: var(--accent); }
 
+.btn-font {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--bg);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color .15s, color .15s;
+}
+.btn-font:hover { border-color: var(--accent); color: var(--accent); }
+
+.font-size-label {
+  font-size: 1rem;
+  color: var(--muted);
+  min-width: 2rem;
+  text-align: center;
+}
 
 /* ---------- Toolbar (rodapé fixo) ---------- */
 .toolbar {
@@ -240,34 +245,13 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   align-items: center;
 }
 
-.btn-font {
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  background: var(--surface);
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: border-color .15s, color .15s;
-}
-.btn-font:hover { border-color: var(--accent); color: var(--accent); }
-
-.font-size-label {
-  font-size: 1rem;
-  color: var(--muted);
-  min-width: 2rem;
-  text-align: center;
-}
-
 /* Botões de ação */
 .btn-toolbar {
   flex: 1;
   padding: 0.75rem 1rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--surface);
+  background: var(--bg);
   font-size: 1rem;
   text-align: center;
   color: var(--text);
