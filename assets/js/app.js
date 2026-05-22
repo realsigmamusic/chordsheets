@@ -59,7 +59,7 @@
         .sort(function (a, b) {
           return (b.mtime || 0) - (a.mtime || 0);
         })
-        .slice(0, 3); // Pega apenas as 5 primeiras
+        .slice(0, 5); // Pega apenas as 5 primeiras
 
       const n = allSongs.length;
       songCount.textContent = n + ' música' + (n !== 1 ? 's' : '');
