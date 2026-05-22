@@ -137,10 +137,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   text-overflow: ellipsis;
 }
 
-.song-card-key {
-  color: var(--accent);
-}
-
 /* ---------- Sem resultados ---------- */
 .no-results {
   text-align: center;

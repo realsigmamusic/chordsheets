@@ -2,6 +2,7 @@
   'use strict';
 
   let allSongs = [];
+  let latestSongs = [];
   let fuse = null;
 
   const searchInput = document.getElementById('search-input');
@@ -27,13 +28,10 @@
     noResults.style.display = 'none';
 
     songList.innerHTML = songs.map(function (song) {
-      const url      = 'song.html?file=' + encodeURIComponent(song.file);
-      const keyBadge = song.key
-        ? '<span class="song-card-key">' + escapeHtml(song.key) + '</span>'
-        : '';
+      const url = 'song.html?file=' + encodeURIComponent(song.file);
 
       return '<a href="' + url + '" class="song-item">'
-        +   '<h1 class="song-card-title">' + escapeHtml(song.title) + ' - ' + keyBadge + '</h1>'
+        +   '<h1 class="song-card-title">' + escapeHtml(song.title) + '</h1>'
         +   '<span class="song-card-artist">' + escapeHtml(song.artist) + '</span>'
         + '</a>';
     }).join('');
@@ -41,7 +39,7 @@
 
   function onSearch() {
     const query = searchInput.value.trim();
-    if (!query) { renderList(allSongs); return; }
+    if (!query) { renderList(latestSongs); return; }
     renderList(fuse.search(query).map(function (r) { return r.item; }));
   }
 
@@ -57,16 +55,24 @@
         return titleA.localeCompare(titleB);
       });
 
+      latestSongs = [...data]
+        .sort(function (a, b) {
+          return (b.mtime || 0) - (a.mtime || 0);
+        })
+        .slice(0, 3); // Pega apenas as 5 primeiras
+
       const n = allSongs.length;
       songCount.textContent = n + ' música' + (n !== 1 ? 's' : '');
 
+      // Fuse busca por: título, artista, letra
       fuse = new Fuse(allSongs, {
-        keys: ['title', 'artist'],
+        keys: ['title', 'artist', 'lyrics'],
         threshold: 0.35,
         minMatchCharLength: 2,
+        ignoreLocation: true
       });
 
-      renderList(allSongs);
+      renderList(latestSongs);
     } catch (err) {
       console.error('Falha ao carregar songs.json', err);
       songList.innerHTML = '<p style="padding:1rem;color:var(--danger)">Erro ao carregar músicas.</p>';

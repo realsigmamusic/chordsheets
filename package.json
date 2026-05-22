@@ -1,0 +1,11 @@
+{
+  "name": "chordsheets",
+  "version": "1.0.0",
+  "description": "ChordSheets - Cifra builder",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": ["chords", "music"],
+  "author": "",
+  "license": "MIT"
+}
