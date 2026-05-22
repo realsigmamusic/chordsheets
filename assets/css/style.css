@@ -10,8 +10,7 @@
   --accent:    #0056b3;
   --accent-dim: rgba(0, 86, 179, 0.08); 
   --radius:    10px;
-  --font-ui:   'Georgia', 'Times New Roman', serif;
-  --font-mono: 'Courier New', Courier, monospace;
+  --font-ui:   sans-serif; /* monospace; serif; */
   --chord-size: 16px;
 }
 
