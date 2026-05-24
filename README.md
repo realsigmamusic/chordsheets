@@ -34,14 +34,14 @@ ou:
 npm run build
 ```
 
-## 📶 PWA & Estratégia de Atualização Offline
+## PWA & Estratégia de Atualização Offline
 O projeto utiliza um Service Worker configurado com a estratégia **Stale-while-revalidate** combinado com um instalador individual à prova de falhas.
 
 Ao abrir o aplicativo, ele carrega instantaneamente os dados do cache local (velocidade máxima). Se houver conexão com a internet, o Service Worker verifica o `songs.json` em segundo plano e atualiza as novas cifras arquivo por arquivo.
 
-> ⚠️ **Nota de Manutenção:** Sempre que gerar um novo lote de músicas com o `build.js`, lembre-se de alterar a versão do cache na primeira linha do arquivo `sw.js` (ex: `const CACHE_NAME = 'v1';`) para forçar os dispositivos dos músicos a baixarem as novidades.
+> **Nota de Manutenção:** Sempre que gerar um novo lote de músicas com o `build.js`, lembre-se de alterar a versão do cache na primeira linha do arquivo `sw.js` (ex: `const CACHE_NAME = 'v1';`) para forçar os dispositivos dos músicos a baixarem as novidades.
 
-## 🛠️ Como executar localmente
+## Como executar localmente
 Como o projeto utiliza a `Fetch API` localmente para carregar os arquivos JSON e as cifras, o navegador bloqueará o funcionamento direto se você apenas clicar duas vezes no `index.html` (Erro de CORS). Você precisará de um servidor web local simples.
 
 ### Usando Python
@@ -63,5 +63,5 @@ npx http-server .
 1. Instale a extensão **Live Server**.
 2. Clique com o botão direito no arquivo `index.html` e selecione **"Open with Live Server"**.
 
-## 📄 Licença
+## Licença
 Distribuído sob a licença **[MIT](https://www.google.com/search?q=LICENSE)**.
