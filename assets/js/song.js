@@ -18,6 +18,7 @@ const elToolbar   = document.getElementById('toolbar');
 const elBtnDown   = document.getElementById('btn-down');
 const elBtnUp     = document.getElementById('btn-up');
 const elBtnReset  = document.getElementById('btn-reset');
+const elBtnFavorite = document.getElementById('btn-offline');
 const elBtnShare  = document.getElementById('btn-share');
 const elBtnDl     = document.getElementById('btn-download');
 const elBtnFontDown = document.getElementById('btn-font-down');
@@ -28,10 +29,11 @@ const elFontDisp    = document.getElementById('font-size-display');
 const FONT_SIZES = [10, 12, 14, 16, 18, 20, 22, 24, 26];
 const FONT_KEY   = 'chordsheets_fontsize';
 const TRANS_KEY  = `chordsheets_transpose_${fileUrl}`;
+const FAVORITES_KEY = 'chordsheets_favorites';
 
-let song      = null;   // ChordSheetJS Song object
+let song      = null;
 let transpose = 0;
-let fontIdx   = 4;      // índice padrão = 16px
+let fontIdx   = 4;
 
 /* ── Tamanho de fonte ── */
 function loadFontPref() {
@@ -67,6 +69,31 @@ function saveTransposePref() {
   localStorage.setItem(TRANS_KEY, transpose);
 }
 
+/* ── Gerenciar Favoritos ── */
+function getSavedFavorites() {
+  const saved = localStorage.getItem(FAVORITES_KEY);
+  return saved ? JSON.parse(saved) : [];
+}
+
+function isFavorite() {
+  return getSavedFavorites().includes(fileUrl);
+}
+
+function toggleFavorite() {
+  const saved = getSavedFavorites();
+  const index = saved.indexOf(fileUrl);
+  
+  if (index > -1) {
+    saved.splice(index, 1);
+    elBtnFavorite.textContent = 'Desfavoritar';
+  } else {
+    saved.push(fileUrl);
+    elBtnFavorite.textContent = 'Favoritar';
+  }
+  
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(saved));
+}
+
 /* ── Renderiza metadados do ChordPro ── */
 function renderMetadata(song) {
   if (!song || !song.metadata) return;
@@ -74,42 +101,34 @@ function renderMetadata(song) {
   const meta = song.metadata;
   let html = '';
 
-  // Artista
   if (meta.artist) {
     html += `<span class="song-meta-item"><strong>Artista:</strong> ${escapeHtml(meta.artist)}</span>`;
   }
 
-  // Compositor
   if (meta.composer) {
     html += `<span class="song-meta-item"><strong>Compositor:</strong> ${escapeHtml(meta.composer)}</span>`;
   }
 
-  // Álbum
   if (meta.album) {
     html += `<span class="song-meta-item"><strong>Álbum:</strong> ${escapeHtml(meta.album)}</span>`;
   }
 
-  // Ano
   if (meta.year) {
     html += `<span class="song-meta-item"><strong>Ano:</strong> ${escapeHtml(meta.year)}</span>`;
   }
 
-  // Copyright
   if (meta.copyright) {
     html += `<span class="song-meta-item"><strong>Copyright:</strong> ${escapeHtml(meta.copyright)}</span>`;
   }
 
-  // Tom (key)
   if (meta.key) {
     html += `<span class="song-meta-item"><strong>Tom:</strong> ${escapeHtml(meta.key)}</span>`;
   }
 
-  // Tempo
   if (meta.tempo) {
     html += `<span class="song-meta-item"><strong>bpm:</strong> ${escapeHtml(meta.tempo)}</span>`;
   }
 
-  // Compasso (time)
   if (meta.time) {
     html += `<span class="song-meta-item"><strong>Compasso:</strong> ${escapeHtml(meta.time)}</span>`;
   }
@@ -136,7 +155,6 @@ function renderSheet() {
 
   elTransVal.textContent = (transpose >= 0 ? '+' : '') + transpose;
 
-  // Calcula tom atual a partir do keyParam
   if (keyParam) {
     try {
       const key = ChordSheetJS.Chord.parse(keyParam);
@@ -154,6 +172,9 @@ elBtnUp.addEventListener('click',    () => { transpose++; saveTransposePref(); r
 elBtnDown.addEventListener('click',  () => { transpose--; saveTransposePref(); renderSheet(); });
 elBtnReset.addEventListener('click', () => { transpose = 0; saveTransposePref(); renderSheet(); });
 
+/* ── Favoritar ── */
+elBtnFavorite.addEventListener('click', toggleFavorite);
+
 /* ── Compartilhar ── */
 elBtnShare.addEventListener('click', async () => {
   const shareData = {
@@ -166,8 +187,8 @@ elBtnShare.addEventListener('click', async () => {
       await navigator.share(shareData);
     } else {
       await navigator.clipboard.writeText(location.href);
-      elBtnShare.textContent = 'Link copiado!';
-      setTimeout(() => elBtnShare.textContent = '⬆ Compartilhar', 2000);
+      elBtnShare.textContent = 'Copiado!';
+      setTimeout(() => elBtnShare.textContent = 'Compartilhar', 2000);
     }
   } catch (e) {
     console.warn('share failed', e);
@@ -206,16 +227,21 @@ if (!fileUrl) {
       const parser = new ChordSheetJS.ChordProParser();
       song = parser.parse(text);
 
-      // Renderiza metadados
       renderMetadata(song);
 
-      // Download do arquivo original
       const blob = new Blob([text], { type: 'text/plain' });
       elBtnDl.href     = URL.createObjectURL(blob);
       elBtnDl.download = fileUrl.split('/').pop() || 'cifra.cho';
 
       renderSheet();
       showContent();
+      
+      // Atualiza estado do botão
+      if (isFavorite()) {
+        elBtnFavorite.textContent = 'Desfavoritar';
+      } else {
+        elBtnFavorite.textContent = 'Favoritar';
+      }
     })
     .catch(err => showError(err.message));
 }
