@@ -124,15 +124,15 @@ function renderMetadata(song) {
   if (meta.key) {
     html += `<span class="song-meta-item"><strong>Tom:</strong> ${escapeHtml(meta.key)}</span>`;
   }
-
-  if (meta.tempo) {
-    html += `<span class="song-meta-item"><strong>bpm:</strong> ${escapeHtml(meta.tempo)}</span>`;
-  }
-
+  
   if (meta.time) {
     html += `<span class="song-meta-item"><strong>Compasso:</strong> ${escapeHtml(meta.time)}</span>`;
   }
-
+  
+  if (meta.tempo) {
+    html += `<span class="song-meta-item"><strong>bpm:</strong> ${escapeHtml(meta.tempo)}</span>`;
+  }
+  
   elSongHeader.innerHTML = html;
 }
 
