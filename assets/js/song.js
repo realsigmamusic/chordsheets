@@ -85,10 +85,10 @@ function toggleFavorite() {
   
   if (index > -1) {
     saved.splice(index, 1);
-    elBtnFavorite.textContent = 'Desfavoritar';
+    elBtnFavorite.textContent = 'Favoritar';
   } else {
     saved.push(fileUrl);
-    elBtnFavorite.textContent = 'Favoritar';
+    elBtnFavorite.textContent = 'Desfavoritar';
   }
   
   localStorage.setItem(FAVORITES_KEY, JSON.stringify(saved));
