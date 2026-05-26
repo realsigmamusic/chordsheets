@@ -64,10 +64,10 @@
   },
   {
     "title": "Eu Navegarei",
-    "artist": "Música Cristã",
-    "file": "songs/musica-crista/eu-navegarei.cho",
+    "artist": "Harpa Cristã",
+    "file": "songs/harpa-crista/eu-navegarei.cho",
     "lyrics": "Eu navegarei No oceano do Espírito E ali adorarei Ao Deus do meu amor Espírito, Espírito Que desce como fogo Vem como em Pentecostes E enche-me de novo Eu adorarei Ao Deus da minha vida Que me compreendeu Sem nenhuma explicação",
-    "mtime": 1779486915726.0505
+    "mtime": 1779814246234.4668
   },
   {
     "title": "Hino Quadrangular",
@@ -82,6 +82,13 @@
     "file": "songs/julliany-souza/lindo-momento.cho",
     "lyrics": "Tão lindo é cada momento Que me visita e faz de mim o Teu altar Quero ir contigo mais profundo Segura a minha mão, eu sei Nunca vai soltar Leva-me a um lugar Onde só você e eu Desfrutamos o momento Te amo, meu papai Eu dependo desse amor E sem Ti eu sei que morro Me enxergou na minha tormenta Me livrou em meus problemas Transformou minha tristeza E mudou minha vida inteira Me vestiu com roupas novas Pôs azeite em minha cabeça Me deu um lugar na mesa O meu Pai não me rejeita",
     "mtime": 1779713408407.785
+  },
+  {
+    "title": "Porque Ele Vive",
+    "artist": "Harpa Cristã",
+    "file": "songs/harpa-crista/porque-ele-vive.cho",
+    "lyrics": "Deus enviou seu Filho amado Pra Perdoar e me salvar Na cruz morreu por meus pecados Mas ressurgiu e vivo com o Pai está. Porque ele vive posso crer no amanhã Porque Ele vive temor não há Mas eu bem sei, eu sei, que a minha vida Está nas mãos do meu Jesus que vivo está. E quando enfim chegar a hora Em que a morte enfrentarei Sem medo então terei vitória Irei à glória ao meu Jesus que vivo está.",
+    "mtime": 1779814300841.6104
   },
   {
     "title": "Quem É Esse?",
@@ -121,9 +128,9 @@
   {
     "title": "Terra Seca",
     "artist": "Fraternidade São João Paulo II",
-    "file": "songs/fraternidade-são-joão-paulo-ii/terra-seca.cho",
+    "file": "songs/fraternidade-sao-joao-paulo-ii/terra-seca.cho",
     "lyrics": "Somente em ti construirei A minha casa Somente em ti colocarei minha esperança Pois só em ti Minh'alma achou descanso Só em ti eu pude respirar Pois só em ti Minh'alma achou descanso Só em ti eu pude respirar O meu coração deseja te encontrar Como a terra seca anseia pela chuva Vem me saciar pois eu descobri Que aqui é o meu lugar O meu coração deseja te encontrar Como a terra seca anseia pela chuva Vem me saciar pois eu descobri Que aqui é o meu lugar",
-    "mtime": 1779486915726.0505
+    "mtime": 1779811516754.6304
   },
   {
     "title": "Tudo é Perda",
