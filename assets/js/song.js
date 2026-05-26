@@ -196,7 +196,7 @@ elBtnShare.addEventListener('click', async () => {
   const titulo = song && song.metadata && song.metadata.title ? song.metadata.title : titleParam;
   const artista = song && song.metadata && song.metadata.artist ? song.metadata.artist : artistParam;
   
-  const textoMensagem = `Cifra de ${titulo} ${artista}`.trim();
+  const textoMensagem = `Cifra de ${titulo} - ${artista}`.trim();
 
   // dados para o compartilhador
   const shareData = {
