@@ -21,6 +21,7 @@ h2.subtitle {
 
 .paragraph.chorus {
   border-left: 0.2rem solid var(--accent);
+  border-radius: 0 var(--radius) 0 0;
   background-color: var(--chorus);
   padding-left: 0.5rem;
 }
@@ -35,6 +36,7 @@ h3.label, .comment {
   font-weight: bold;
   color: var(--accent);
   background-color: var(--surface);
+  border-radius: 0 var(--radius) 0 0;
   padding: 0.25rem 0.5rem;
   margin: 0 0 0.5rem 0;
   display: block;
