@@ -36,7 +36,7 @@
   }
 
   function renderCard(song) {
-    const url = 'song.html?file=' + encodeURIComponent(song.file);
+    const url = '?file=' + encodeURIComponent(song.file);
     const keyBadge = song.key
       ? '<span class="song-card-key">' + escapeHtml(song.key) + '</span>'
       : '';
@@ -114,6 +114,23 @@
     try {
       const res = await fetch('songs.json');
       const data = await res.json();
+      
+      const navBack = document.getElementById('nav-back');
+      const songCountLabel = document.getElementById('song-count');
+
+      // Alternar entre tela inicial e cifra baseado na URL
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('file')) {
+        document.getElementById('home-view').style.display = 'none';
+        document.getElementById('song-view').style.display = 'block';
+        if (navBack) navBack.style.display = 'block';
+        if (songCountLabel) songCountLabel.style.display = 'none';
+      } else {
+        document.getElementById('home-view').style.display = 'block';
+        document.getElementById('song-view').style.display = 'none';
+        if (navBack) navBack.style.display = 'none';
+        if (songCountLabel) songCountLabel.style.display = 'inline';
+      }
 
       // allSongs = ALFABÉTICA (para "ver todas")
       allSongs = data.sort(function (a, b) {

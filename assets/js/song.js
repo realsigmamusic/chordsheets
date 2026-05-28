@@ -211,7 +211,7 @@ elBtnShare.addEventListener('click', async () => {
     } else {
       await navigator.clipboard.writeText(`${textoMensagem}\n${shareUrl}`);
       elBtnShare.textContent = 'Copiado!';
-      setTimeout(() => elBtnShare.textContent = '⬆ Compartilhar', 2000);
+      setTimeout(() => elBtnShare.textContent = 'Compartilhar', 2000);
     }
   } catch (e) {
     console.warn('share failed', e);

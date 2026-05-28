@@ -1,16 +1,17 @@
 .chord-sheet {
   margin-top: 1rem;
-  font-family: var(--font-ui);
+  font-family: var(--font-sans-serif);
   font-size: var(--chord-size);
+  color: var(--secondary-color);
 }
 
 h1.title {
-  color: var(--accent);
+  color: var(--body-color);
   margin: 1rem 0 0 0;
 }
 
 h2.subtitle {
-  color: var(--muted);
+  color: var(--secondary-text-emphasis);
   font-size: 1.1rem;
   margin: 0;
 }
@@ -20,9 +21,9 @@ h2.subtitle {
 }
 
 .paragraph.chorus {
-  border-left: 0.2rem solid var(--accent);
-  border-radius: 0 var(--radius) 0 0;
-  background-color: var(--chorus);
+  border-left: 0.2rem solid var(--warning-text-emphasis);
+  border-radius: 0 var(--border-radius) 0 0;
+  background-color: var(--tertiary-bg);
   padding-left: 0.5rem;
 }
 
@@ -34,9 +35,9 @@ h2.subtitle {
 h3.label, .comment {
   font-size: var(--chord-size);
   font-weight: bold;
-  color: var(--accent);
-  background-color: var(--surface);
-  border-radius: 0 var(--radius) 0 0;
+  color: var(--warning-text-emphasis);
+  background-color: var(--secondary-bg);
+  border-radius: 0 var(--border-radius) 0 0;
   padding: 0.25rem 0.5rem;
   margin: 0 0 0.5rem 0;
   display: block;
@@ -58,7 +59,7 @@ h3.label, .comment {
   min-height: calc(var(--chord-size) + 0.5rem);
   padding-right: 0.5rem;
   font-weight: bold;
-  color: var(--accent);
+  color: var(--info-text-emphasis);
   margin-bottom: -0.5rem;
 }
 
@@ -75,12 +76,12 @@ h3.label, .comment {
 }
 
 .song-meta-item {
+  color: var(--info-text-emphasis);
   font-size: 0.75rem;
-  color: var(--accent);
   margin-right: 1rem;
 }
 
 .song-meta-item strong {
-  color: var(--muted);
+  color: var(--tertiary-color);
   font-weight: normal;
 }

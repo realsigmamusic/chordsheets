@@ -2,7 +2,6 @@ const CACHE_NAME = 'v26.05.26';
 const ASSETS = [
   './',
   './index.html', 
-  './song.html',
   './manifest.json',
   './maskable_icon_x512.png',
   './assets/css/song.css',
@@ -42,7 +41,7 @@ self.addEventListener('install', (e) => {
           }
         }));
 
-        console.log('🎉 PWA: O catálogo completo foi salvo e está pronto para uso offline!');
+        console.log('PWA: O catálogo completo foi salvo e está pronto para uso offline!');
       } catch (err) {
         console.error('PWA: Erro geral ao processar o songs.json', err);
       }

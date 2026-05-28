@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ChordSheets</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/song.css" />
   <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -19,50 +20,89 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Contrato">
-    <meta name="theme-color" content="#e5e5e5">
+    <meta name="theme-color" content="#e9ecef">
     <link rel="apple-touch-icon" href="maskable_icon_x512.png">
 </head>
 <body>
+  <header>
+    <nav class="navbar">
+      <a href="?" class="navbar-back" id="nav-back" style="display:none" aria-label="Voltar">‹</a>
+      <a href="?" class="navbar-brand">ChordSheets</a>
+      <span class="song-count" id="song-count"></span>
+    </nav>
+  </header>
 
-  <nav class="navbar">
-    <span class="navbar-brand">ChordSheets</span>
-    <span class="song-count" id="song-count"></span>
-  </nav>
+  <!-- TELA INICIAL -->
+  <main id="home-view">
+    <div class="container">
+      <section class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input
+          type="search"
+          id="search-input"
+          class="search-input"
+          placeholder="Buscar por título ou artista…"
+          autocomplete="off"
+          autofocus
+        />
+      </section>
 
-  <div class="container">
+      <!-- MÚSICAS FAVORITAS -->
+      <section id="favorites-section" style="display:none" aria-labelledby="favorites-title">
+        <h2 class="section-title" id="favorites-title">Músicas favoritas</h2>
+        <div class="song-list" id="favorites-list"></div>
+      </section>
 
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input
-        type="search"
-        id="search-input"
-        class="search-input"
-        placeholder="Buscar por título ou artista…"
-        autocomplete="off"
-        autofocus
-      />
+      <!-- TODAS AS MÚSICAS -->
+      <section id="all-songs-section" aria-labelledby="all-songs-title">
+        <h2 class="section-title" id="all-songs-title">Todas as músicas</h2>
+        <div class="song-list" id="song-list"></div>
+        <button id="btn-show-all" class="btn-show-all" style="display:none">Ver todas as músicas</button>
+      </section>
+
+      <div class="no-results" id="no-results">
+        Nenhuma música encontrada.
+      </div>
     </div>
+  </main>
 
-    <!-- SEÇÃO: FAVORITOS -->
-    <section id="favorites-section" style="display:none">
-      <h2 class="section-title">Favoritos</h2>
-      <div class="song-list" id="favorites-list"></div>
-    </section>
+  <!-- TELA MÚSICA -->
+  <main id="song-view" style="display:none">
+    <div class="container">
+      <div id="loading-msg" class="state-msg">Carregando cifra…</div>
+      <div id="error-msg"   class="state-msg" style="display:none"><span id="error-text"></span></div>
 
-    <!-- SEÇÃO: TODAS AS MÚSICAS -->
-    <section id="all-songs-section">
-      <h2 class="section-title">Todas as Músicas</h2>
-      <div class="song-list" id="song-list"></div>
-      <button id="btn-show-all" class="btn-show-all" style="display:none">Ver todas as músicas</button>
-    </section>
-
-    <div class="no-results" id="no-results">
-      Nenhuma música encontrada.
+      <article id="song-content" style="display:none">
+        <div class="transpose-row">
+          <button id="btn-down"  class="btn-circle">−</button>
+          <span   id="transpose-value" class="transpose-value">0</span>
+          <button id="btn-up"    class="btn-circle">+</button>
+          <button id="btn-reset" class="btn-reset">×</button>
+          <span   id="current-key-label" class="key-label"></span>
+          <div class="font-size-group">
+            <button class="btn-font" id="btn-font-down" title="Diminuir fonte">A−</button>
+            <span class="font-size-label" id="font-size-display">16</span>
+            <button class="btn-font" id="btn-font-up" title="Aumentar fonte">A+</button>
+          </div>
+        </div>
+        
+        <header id="song-header" class="song-header"></header>
+        <div id="chord-sheet"></div>
+      </article>
     </div>
+  </main>
 
-  </div>
+  <footer id="toolbar" class="toolbar" style="display:none">
+    <div class="toolbar-inner">
+      <button id="btn-offline" class="btn-toolbar">Favoritar</button>
+      <button id="btn-share" class="btn-toolbar">Compartilhar</button>
+      <a id="btn-download" href="#" download class="btn-toolbar">Download</a>
+    </div>
+  </footer>
 
   <script src="assets/vendor/fuse.min.js"></script>
+  <script src="assets/vendor/chordsheetjs.min.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/song.js"></script>
 </body>
 </html>
