@@ -2,12 +2,13 @@
 Uma aplicação web rápida, leve e direto ao ponto para gerenciamento, visualização e busca de cifras musicais no formato [**ChordPro**](https://github.com/ChordPro/chordpro). Projetado especificamente para músicos e ministérios de louvor que precisam de acesso instantâneo, organizado e 100% confiável ao seu repertório, mesmo em locais sem internet.
 
 ## Funcionalidades
-* **Suporte 100% Offline (PWA):** Uma vez instalado no celular ou computador, o aplicativo funciona perfeitamente sem internet. O mecanismo baixa o catálogo inteiro silenciosamente em segundo plano.
-* **Geração Automática do Catálogo:** Um script de automação em Node.js varre suas pastas, limpa tags estruturais e monta o banco de dados sozinho.
+* **Estratégia Offline Híbrida (Resiliência de Palco):** Além do cache tradicional de PWA via Service Worker, o app introduz a funcionalidade de **Setlist**. Ao adicionar músicas ao seu repertório, o conteúdo textual é salvo no `localStorage`. Isso garante que as músicas críticas para o show estejam disponíveis instantaneamente, ignorando instabilidades do sistema operacional que costumam limpar caches de aplicativos em segundo plano.
+* **Navegação entre Músicas:** Ao abrir uma música através da seção de Setlist, botões de "Anterior" e "Próxima" ficam disponíveis no rodapé, permitindo transições rápidas durante a performance sem precisar retornar à lista principal.
+* **Interface Estilo App Nativo:** Cabeçalho fixo com controles de transposição de tom (+/-) e ajuste de tamanho de fonte sempre à mão, mesmo durante a rolagem da cifra.
+* **Favoritos e Recentes:** Acesso rápido às músicas marcadas com estrela e às últimas adições do catálogo diretamente na tela inicial.
 * **Busca Inteligente (Fuzzy Search):** Utiliza o **Fuse.js** para buscas instantâneas e tolerantes a erros de digitação. Pesquise por título, artista ou trechos da letra.
-* **Leitura Dinâmica:** As cifras são renderizadas dinamicamente através do `index.html` (aplicativo de página única), que captura os parâmetros (`?file=`) e renderiza o arquivo `.cho` via URL.
-* **Ferramentas de Palco:** Transposição de tom em tempo real (+/-) com o valor de transposição clicável para resetar, e ajuste dinâmico do tamanho da fonte com salvamento automático de preferências.
-* **Alta Performance:** Construído com JavaScript puro (Vanilla) e folha de estilos enxuta para garantir carregamento em milissegundos e consumo mínimo de bateria.
+* **Geração Automática do Catálogo:** Um script de automação em Node.js varre suas pastas, limpa tags estruturais e monta o banco de dados sozinho.
+* **Alta Performance:** Construído com JavaScript Vanilla e CSS puro, garantindo carregamento em milissegundos e baixo consumo de bateria, essencial para dispositivos em uso prolongado no palco.
 
 ## Tecnologias Utilizadas
 * **HTML5 / CSS3** (Com variáveis dinâmicas e design responsivo focado no mobile)
