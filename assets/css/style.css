@@ -301,7 +301,43 @@ section button {
   border-color: var(--info);
 }
 
-/* ---------- Estados ---------- */
+/* ---------- Setlist drag-and-drop ---------- */
+.setlist-drag-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: var(--border-radius);
+  transition: opacity .15s, background .15s;
+  cursor: default;
+  user-select: none;
+}
+
+.setlist-drag-item .song-item {
+  flex: 1;
+  min-width: 0;
+}
+
+.drag-handle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.25rem;
+  color: var(--tertiary-color);
+  cursor: grab;
+  touch-action: none;
+}
+.drag-handle:active { cursor: grabbing; }
+
+.setlist-drag-item.dragging {
+  opacity: 0.4;
+}
+
+.setlist-drag-item.drag-over {
+  background: var(--tertiary-bg);
+  outline: 2px dashed var(--primary);
+  outline-offset: -2px;
+}
+
 .state-msg {
   text-align: center;
   padding: 3rem 0;

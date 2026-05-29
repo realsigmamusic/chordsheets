@@ -55,6 +55,30 @@
     return html.replace('?file=', '?origin=setlist&file=');
   }
 
+  /* ── Drag-and-drop state ── */
+  let dragSrcFile = null;
+
+  function reorderSetlist(fromFile, toFile) {
+    const saved = localStorage.getItem(SETLIST_KEY);
+    const setlistData = saved ? JSON.parse(saved) : {};
+    const files = Object.keys(setlistData);
+
+    const fromIdx = files.indexOf(fromFile);
+    const toIdx   = files.indexOf(toFile);
+    if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
+
+    // Reconstrói o objeto na nova ordem
+    files.splice(fromIdx, 1);
+    files.splice(toIdx, 0, fromFile);
+
+    const reordered = {};
+    for (const f of files) reordered[f] = setlistData[f];
+
+    localStorage.setItem(SETLIST_KEY, JSON.stringify(reordered));
+    renderSetlistSection();
+    window.dispatchEvent(new CustomEvent('setlistChanged'));
+  }
+
   function renderSetlistSection() {
     const saved = localStorage.getItem(SETLIST_KEY);
     const setlistData = saved ? JSON.parse(saved) : {};
@@ -62,10 +86,52 @@
 
     if (files.length === 0) {
       setlistSection.style.display = 'none';
-    } else {
-      setlistSection.style.display = 'block';
-      setlistList.innerHTML = files.map(url => renderSetlistCard({ ...setlistData[url], file: url })).join('');
+      return;
     }
+
+    setlistSection.style.display = 'block';
+
+    setlistList.innerHTML = files.map(url => {
+      const song = { ...setlistData[url], file: url };
+      // Wrap cada card num container arrastável
+      return '<div class="setlist-drag-item" draggable="true" data-file="' + escapeHtml(url) + '">'
+        + '<span class="drag-handle" title="Arrastar para reordenar">'
+        + '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">'
+        + '<path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>'
+        + '</svg>'
+        + '</span>'
+        + renderSetlistCard(song)
+        + '</div>';
+    }).join('');
+
+    // Eventos de drag nos itens recém-renderizados
+    setlistList.querySelectorAll('.setlist-drag-item').forEach(item => {
+      item.addEventListener('dragstart', e => {
+        dragSrcFile = item.dataset.file;
+        item.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+
+      item.addEventListener('dragend', () => {
+        item.classList.remove('dragging');
+        setlistList.querySelectorAll('.setlist-drag-item').forEach(i => i.classList.remove('drag-over'));
+      });
+
+      item.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        setlistList.querySelectorAll('.setlist-drag-item').forEach(i => i.classList.remove('drag-over'));
+        if (item.dataset.file !== dragSrcFile) item.classList.add('drag-over');
+      });
+
+      item.addEventListener('drop', e => {
+        e.preventDefault();
+        if (dragSrcFile && item.dataset.file !== dragSrcFile) {
+          reorderSetlist(dragSrcFile, item.dataset.file);
+        }
+        dragSrcFile = null;
+      });
+    });
   }
 
   function renderFavoritesSection() {
