@@ -165,5 +165,6 @@
 
   searchInput.addEventListener('input', onSearch);
   btnShowAll.addEventListener('click', onShowAll);
+  window.addEventListener('favoritesChanged', onSearch);
   init();
 })();

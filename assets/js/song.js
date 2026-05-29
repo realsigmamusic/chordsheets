@@ -97,6 +97,7 @@ function toggleFavorite() {
   }
   
   localStorage.setItem(FAVORITES_KEY, JSON.stringify(saved));
+  window.dispatchEvent(new CustomEvent('favoritesChanged'));
 }
 
 /* ── Renderiza metadados do ChordPro ── */
