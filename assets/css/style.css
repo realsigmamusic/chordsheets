@@ -327,13 +327,6 @@ section button {
   gap: 2px;
 }
 
-.song-card:hover,
-.song-card:focus-visible {
-  border-color: var(--border-color);
-  background: var(--tertiary-bg);
-  outline: none;
-}
-
 .song-card-title {
   font-size: 1.5rem;
   white-space: nowrap;
@@ -359,18 +352,6 @@ section button {
 }
 
 /* ---------- Página da música ---------- */
-.transpose-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: var(--secondary-bg);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
 .font-size-group {
   display: flex;
   align-items: center;
@@ -399,17 +380,6 @@ section button {
   text-align: center;
   font-size: 1rem;
 }
-
-.btn-reset {
-  color: var(--danger);
-  font-size: 1rem;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid var(--border);
-  border-radius: 0.3rem;
-  transition: color .15s, border-color .15s;
-  background: var(--body);
-}
-.btn-reset:hover { border-color: var(--danger); }
 
 .btn-font {
   width: 2.25rem;

@@ -76,7 +76,7 @@
       favoritesSection.style.display = 'none';
     } else {
       favoritesSection.style.display = 'block';
-      favoritesList.innerHTML = favoriteSongs.map(s => renderCard(s, true)).join('');
+      favoritesList.innerHTML = favoriteSongs.map(s => renderCard(s)).join('');
     }
   }
 
@@ -96,7 +96,7 @@
       ? songs.slice(0, LIMIT_HOME)
       : songs;
 
-    songList.innerHTML = toShow.map(s => renderCard(s, isFavorite(s.file))).join('');
+    songList.innerHTML = toShow.map(s => renderCard(s)).join('');
 
     if (showLimited && !showingAll && songs.length > LIMIT_HOME) {
       btnShowAll.style.display = 'block';
