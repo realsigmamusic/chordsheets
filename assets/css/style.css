@@ -193,21 +193,28 @@ a { color: inherit; text-decoration: none; }
 button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
 
 /* ---------- Navbar ---------- */
-.navbar {
+.header-controls {
   position: sticky;
   top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0 1.25rem;
-  height: 3.5rem;
+  z-index: 1000;
   background: var(--secondary-bg);
 }
 
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 1.25rem 0 1.25rem;
+}
+
 .controls {
-  padding: 0.25rem 1.25rem;
-  background: var(--secondary-bg);
+  padding: 0.25rem 1.25rem 0.5rem 1.25rem;
+}
+
+.bi-music-note-list {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
 }
 
 .navbar-brand {
@@ -232,6 +239,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   gap: 0.35rem;
   flex: 1;
   justify-content: flex-end;
+  padding: 0.25rem 0;
 }
 
 .control-group {

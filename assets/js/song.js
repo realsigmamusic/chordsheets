@@ -27,6 +27,10 @@ const FONT_KEY   = 'chordsheets_fontsize';
 const SETLIST_KEY   = 'chordsheets_setlist';
 const FAVORITES_KEY = 'chordsheets_favorites';
 
+/* ── Ícones SVG (Bootstrap) ── */
+const ICON_HEART = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/></svg>`;
+const ICON_HEART_FILL = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/></svg>`;
+
 let fileUrl, titleParam, artistParam, keyParam, transposeParam, originParam, TRANS_KEY;
 let song      = null;
 let transpose = 0;
@@ -98,17 +102,21 @@ function getFavorites() {
   return saved ? JSON.parse(saved) : [];
 }
 
+function updateFavoriteUI() {
+  const isFav = getFavorites().includes(fileUrl);
+  elBtnFavorite.innerHTML = isFav ? ICON_HEART_FILL : ICON_HEART;
+}
+
 function toggleFavorite() {
   const favs = getFavorites();
   const index = favs.indexOf(fileUrl);
   if (index > -1) {
     favs.splice(index, 1);
-    elBtnFavorite.style.opacity = "0.4";
   } else {
     favs.push(fileUrl);
-    elBtnFavorite.style.opacity = "1";
   }
   localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
+  updateFavoriteUI();
   window.dispatchEvent(new CustomEvent('favoritesChanged'));
 }
 
@@ -333,6 +341,7 @@ function initSong() {
   loadFontPref();
   loadTransposePref();
   setupSetlistNavigation();
+  updateFavoriteUI();
 
   fetch(fileUrl)
     .then(r => r.text())
@@ -362,10 +371,6 @@ function initSong() {
       } else {
         elBtnSetlist.textContent = 'Salvar';
       }
-
-      // Atualiza estado do favorito
-      const favs = getFavorites();
-      elBtnFavorite.style.opacity = favs.includes(fileUrl) ? "1" : "0.4";
     })
     .catch(err => showError(err.message));
 }
