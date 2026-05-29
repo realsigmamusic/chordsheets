@@ -11,6 +11,8 @@
   --tertiary-color: rgba(33, 37, 41, 0.5);
   --tertiary-bg: #f8f9fa;
   --secondary-text-emphasis: #2b2f32;
+  --info-text-emphasis: #055160;
+  --warning-text-emphasis: #664d03;
   --border-color: #dee2e6;
   --border-radius: 0.375rem;
 }
@@ -24,6 +26,8 @@
     --tertiary-color: rgba(222, 226, 230, 0.5);
     --tertiary-bg: #2b3035;
     --secondary-text-emphasis: #a7acb1;
+    --info-text-emphasis: #6edff6;
+    --warning-text-emphasis: #ffda6a;
     --border-color: #495057;
   }
 }
