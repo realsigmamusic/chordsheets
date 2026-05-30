@@ -1,8 +1,8 @@
-const CACHE_NAME = 'v26.05.29';
+const CACHE_NAME = 'v26.05.30';
 const ASSETS = [
   './index.html',
   './manifest.json',
-  './maskable_icon_x512.png',
+  './assets/maskable_icon_x512.png',
   './assets/css/song.css',
   './assets/css/style.css',
   './assets/js/app.js',
