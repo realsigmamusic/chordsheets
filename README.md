@@ -1,68 +1,84 @@
 # ChordSheets
-Uma aplicação web rápida, leve e direto ao ponto para gerenciamento, visualização e busca de cifras musicais no formato [**ChordPro**](https://github.com/ChordPro/chordpro). Projetado especificamente para músicos e ministérios de louvor que precisam de acesso instantâneo, organizado e 100% confiável ao seu repertório, mesmo em locais sem internet.
 
-## Funcionalidades
-* **Estratégia Offline Híbrida (Resiliência de Palco):** Além do cache tradicional de PWA via Service Worker, o app introduz a funcionalidade de **Setlist**. Ao adicionar músicas ao seu repertório, o conteúdo textual é salvo no `localStorage`. Isso garante que as músicas críticas para o show estejam disponíveis instantaneamente, ignorando instabilidades do sistema operacional que costumam limpar caches de aplicativos em segundo plano.
-* **Navegação entre Músicas:** Ao abrir uma música através da seção de Setlist, botões de "Anterior" e "Próxima" ficam disponíveis no rodapé, permitindo transições rápidas durante a performance sem precisar retornar à lista principal.
-* **Interface Estilo App Nativo:** Cabeçalho fixo com controles de transposição de tom (+/-) e ajuste de tamanho de fonte sempre à mão, mesmo durante a rolagem da cifra.
-* **Favoritos e Recentes:** Acesso rápido às músicas marcadas com estrela e às últimas adições do catálogo diretamente na tela inicial.
-* **Busca Inteligente (Fuzzy Search):** Utiliza o **Fuse.js** para buscas instantâneas e tolerantes a erros de digitação. Pesquise por título, artista ou trechos da letra.
-* **Geração Automática do Catálogo:** Um script de automação em Node.js varre suas pastas, limpa tags estruturais e monta o banco de dados sozinho.
-* **Alta Performance:** Construído com JavaScript Vanilla e CSS puro, garantindo carregamento em milissegundos e baixo consumo de bateria, essencial para dispositivos em uso prolongado no palco.
+O **ChordSheets** é uma aplicação web (PWA) minimalista, de alta performance e direto ao ponto para gerenciamento, busca e visualização de cifras musicais no formato [**ChordPro**](https://github.com/ChordPro/chordpro). 
 
-## Tecnologias Utilizadas
-* **HTML5 / CSS3** (Com variáveis dinâmicas e design responsivo focado no mobile)
-* **JavaScript (Vanilla / ES6):** Gerencia a lógica de navegação de página única (SPA), busca, transposição e favoritos.
-* **Service Workers & Cache Storage API** (Para a mecânica offline do PWA)
-* **[ChordSheetJS](https://github.com/martijnversluis/ChordSheetJS)** (Parser e renderizador oficial do ChordPro)
-* **[Fuse.js](https://fusejs.io/)** (Motor de busca fuzzy local)
+Projetado especificamente para músicos de palco e ministérios de louvor, o aplicativo elimina a necessidade de PDFs estáticos ou softwares pesados. Ele combina o poder do formato de colchetes com um ecossistema inteligente de armazenamento local, garantindo cifras dinâmicas, responsivas e que nunca deixam o músico na mão no meio do show.
 
-## Como o banco de dados funciona (E Automação)
-O repertório é mantido de forma simples através de arquivos `.cho` dentro da pasta `songs/`. Para que o aplicativo não precise de um banco de dados pesado, utilizamos um script automatizado em Node.js (`build.js`) que lê a sua pasta de músicas e gera o arquivo `songs.json` na raiz do projeto.
+**Acesse a aplicação rodando no GitHub Pages:** [realsigmamusic.github.io/chordsheets](https://realsigmamusic.github.io/chordsheets)
 
-O script extrai os metadados do ChordPro e faz uma limpeza prévia, removendo tags estruturais (como `{start_of_verse}`, `{end_of_chorus}`) do indexador para manter a busca por texto limpa e precisa.
+---
 
-### Como gerar/atualizar o catálogo:
-Sempre que adicionar ou editar uma música na pasta `songs/`, rode o comando abaixo no terminal para atualizar o seu índice:
+## Diferenciais
 
-```bash
-node build.js
-```
+* **Alinhamento Perfeito de Fonte (Sem Quebras):** Ao contrário dos grandes portais de cifras que renderizam o texto de forma rígida em tags `<pre>`, o ChordSheets processa a cifra estruturalmente em blocos HTML fluidos (`.row`, `.chord`, `.lyrics`). Você pode aumentar ou diminuir a escala da fonte (`A+` / `A-`) e os acordes permanecem milimetricamente fixados sobre a sílaba correta.
+* **Palco Blindado (Setlist Offline Real):** Políticas de cache de navegadores móveis costumam limpar dados repentinamente em inicializações frias (*Cold Starts*) para poupar bateria do celular. O ChordSheets blinda o repertório: ao adicionar músicas ao seu **Repertório (Setlist)**, o conteúdo textual bruto (`.cho`) é selado diretamente no `localStorage`. Se faltar internet no palco, o método `.catch()` da requisição assume e renderiza tudo instantaneamente da memória do dispositivo.
+* **Transposer Resiliente com URL Viva:** Mude o tom da música instantaneamente através de um círculo de quintas em JavaScript. O tom selecionado é memorizado no dispositivo e anexado via parâmetros diretamente na URL (`?file=...&key=...`), facilitando o compartilhamento da cifra no tom exato com os outros integrantes da banda.
+* **Navegação Contínua no Palco:** Ao abrir uma cifra a partir do seu Repertório, uma barra de navegação flutuante dedicada (`Anterior` / `Próxima`) surge no rodapé. Isso permite transicionar entre as músicas agendadas para aquela noite com um único toque, eliminando a necessidade de retornar à tela inicial.
+* **Busca Avançada com Algoritmo Fuzzy:** Impulsionado pelo `Fuse.js`, a barra de pesquisa executa uma varredura instantânea e profunda cruzando dados de **Título**, **Artista** e trechos da **Letra da música** simultaneamente, ignorando acentos ou erros pequenos de digitação.
+* **UI Dinâmica com DNA Bootstrap:** Interface limpa construída com variáveis CSS nativas (`:root`). Conta com suporte automático a **Modo Claro e Modo Escuro** via sistema (`prefers-color-scheme`), sincronizando inclusive a barra de status do sistema operacional do celular (`theme-color`).
 
-ou:
+---
 
-```bash
-npm run build
-```
+## Tecnologias e Arquitetura
 
-## PWA & Estratégia de Atualização Offline
-O projeto utiliza um Service Worker configurado com a estratégia **Stale-while-revalidate** combinado com um instalador individual à prova de falhas.
+Focado em simplicidade de deploy, velocidade máxima de carregamento e zero dependência de servidores ativos (Serverless):
 
-Ao abrir o aplicativo, ele carrega instantaneamente os dados do cache local (velocidade máxima). Se houver conexão com a internet, o Service Worker verifica o `songs.json` em segundo plano e atualiza as novas cifras arquivo por arquivo.
-* **Estratégia de Cache Inteligente:** O Service Worker utiliza a estratégia "Stale-while-revalidate" para garantir que o aplicativo carregue instantaneamente do cache e, em segundo plano, verifique por atualizações.
-* **Atualização de Conteúdo:** Ao gerar um novo lote de músicas com `build.js`, o Service Worker detecta automaticamente as mudanças no `songs.json` e baixa as novas cifras individualmente. A atualização da `CACHE_NAME` no `sw.js` só é necessária para forçar a atualização dos arquivos principais do aplicativo (HTML, CSS, JS).
+* **Vanilla JavaScript (ES6+)** - Sem frameworks complexos (React/Vue), garantindo que o app rode em celulares antigos sem travar.
+* **HTML5 & CSS3 Custom Properties** - Layout responsivo, focado em legibilidade de alto contraste sob iluminação de palco.
+* **ChordSheetJS** - Motor robusto encarregado de parsear e converter os arquivos `.cho` em HTML responsivo.
+* **Fuse.js** - Mecanismo leve de busca fuzzy local.
+* **Service Worker (Cache-First)** - Configurado para cachear instantaneamente a casca estrutural do app (HTML, CSS, JS e Vendors), permitindo inicialização offline imediata.
 
-## Como executar localmente
-Como o projeto utiliza a `Fetch API` localmente para carregar os arquivos JSON e as cifras, o navegador bloqueará o funcionamento direto se você apenas clicar duas vezes no `index.html` (Erro de CORS). Você precisará de um servidor web local simples.
+---
+
+## Como o Catálogo é Alimentado
+
+O acervo de músicas é armazenado em formato de texto puro `.cho` dentro da estrutura do projeto. Para manter a aplicação leve e estática, o índice de busca é centralizado em um arquivo único `songs.json` gerado via automação.
+
+### O Fluxo de Trabalho:
+**Build do Catálogo:** Execução do script gerador que varre a pasta de músicas, extrai as letras limpas para otimizar o tamanho do indexador do `Fuse.js`, carimba o timestamp de modificação (`mtime` para a seção de Recentes) e reconstrói o `songs.json`.
+
+Sempre que o catálogo for atualizado, basta rodar o comando de compilação da sua esteira e realizar o `git push` para atualizar o GitHub Pages automaticamente.
+
+---
+
+## Organização do Projeto
+
+* `index.html`: Ponto de entrada do aplicativo (SPA). Gerencia a Home, buscas, favoritos e listagem do Repertório.
+* `song.html`: Tela de performance que carrega, transpõe e renderiza a cifra selecionada.
+* `sw.js`: Service worker focado no isolamento e persistência dos assets da aplicação.
+* `songs.json`: Índice estruturado de metadados de todo o acervo.
+* `assets/js/app.js`: Inteligência da tela inicial, busca fuzzy e manipulação do armazenamento doméstico.
+* `assets/js/song.js`: Motor de renderização da cifra, transposição, escala de fontes e navegação do repertório.
+* `assets/css/`: Folhas de estilo divididas (`style.css` para a estrutura global e `song.css` para o comportamento e design visual dos acordes).
+
+---
+
+## Execução Local
+
+Como o projeto faz requisições locais (`Fetch API`) para carregar o `songs.json` e os arquivos `.cho`, o navegador bloqueará o funcionamento se você abrir o `index.html` clicando duas vezes (Erro de CORS). É necessário rodar um servidor local simples:
 
 ### Usando Python
-Se você tiver o Python instalado, basta rodar dentro da pasta do projeto:
-
 ```bash
 python -m http.server 8000
+
 ```
 
-E acessar `http://localhost:8000` no navegador.
+Acesse `http://localhost:8000`
 
-### Usando o Node.js (npx)
-Se preferir usar o ecossistema do Node, você pode levantar um servidor rápido com:
+### Usando o Node.js
+
 ```bash
 npx http-server .
+
 ```
 
-### Usando o VS Code / VSCodium
-1. Instale a extensão **Live Server**.
-2. Clique com o botão direito no arquivo `index.html` e selecione **"Open with Live Server"**.
+### Usando o VS Code / Code OSS
+
+Instale a extensão **Live Server**, clique com o botão direito no `index.html` e selecione **"Open with Live Server"**.
+
+---
 
 ## Licença
-Distribuído sob a licença **[MIT](https://www.google.com/search?q=LICENSE)**.
+
+Este projeto está sob a licença **MIT**. Sinta-se livre para usar, clonar e adaptar para a sua banda ou igreja.
