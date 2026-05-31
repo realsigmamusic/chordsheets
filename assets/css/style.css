@@ -191,6 +191,7 @@ section button {
 }
 
 .song-card-artist {
+  display: block;
   font-size: 1rem;
   color: var(--tertiary-color);
   font-style: italic;
