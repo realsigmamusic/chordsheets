@@ -270,6 +270,18 @@ function renderSheet() {
       elKeyLabel.textContent = '';
     }
   }
+
+  // Adiciona a versão do ChordSheetJS como um rodapé
+  const footer = document.createElement('div');
+  footer.style.marginTop = '2rem';
+  footer.style.paddingTop = '1rem';
+  footer.style.borderTop = '1px solid var(--border-color)';
+  footer.style.fontSize = '0.75rem';
+  footer.style.color = 'var(--tertiary-color)';
+  footer.style.textAlign = 'center';
+  
+  footer.textContent = `ChordSheetJS v${ChordSheetJS.version}`;
+  elSheet.appendChild(footer);
 }
 
 elBtnUp.addEventListener('click',    () => { transpose++; saveTransposePref(); updateUrlParams(); renderSheet(); });
