@@ -7,24 +7,18 @@ const elContent   = document.getElementById('song-content');
 const elLoading   = document.getElementById('loading-msg');
 const elError     = document.getElementById('error-msg');
 const elErrorText = document.getElementById('error-text');
-const elToolbar   = document.getElementById('toolbar');
 const elBtnDown   = document.getElementById('btn-down');
 const elBtnUp     = document.getElementById('btn-up');
-const elBtnSetlist  = document.getElementById('btn-setlist');
 const elBtnFavorite = document.getElementById('btn-favorite');
 const elBtnShare  = document.getElementById('btn-share');
 const elBtnDl     = document.getElementById('btn-download');
 const elBtnFontDown = document.getElementById('btn-font-down');
 const elBtnFontUp   = document.getElementById('btn-font-up');
 const elFontDisp    = document.getElementById('font-size-display');
-const elNavSection  = document.getElementById('setlist-navigation');
-const elNavPrev     = document.getElementById('nav-prev-song');
-const elNavNext     = document.getElementById('nav-next-song');
 
 /* ── Estado ── */
 const FONT_SIZES = [10, 12, 14, 16, 18, 20, 22, 24, 26];
 const FONT_KEY   = 'chordsheets_fontsize';
-const SETLIST_KEY   = 'chordsheets_setlist';
 const FAVORITES_KEY = 'chordsheets_favorites';
 
 /* ── Ícones SVG (Bootstrap) ── */
@@ -86,16 +80,6 @@ function saveTransposePref() {
   localStorage.setItem(TRANS_KEY, transpose);
 }
 
-/* ── Gerenciar Setlist (Offline Total) ── */
-function getSetlist() {
-  const saved = localStorage.getItem(SETLIST_KEY);
-  return saved ? JSON.parse(saved) : {};
-}
-
-function isInSetlist() {
-  return !!getSetlist()[fileUrl];
-}
-
 /* ── Gerenciar Favoritos Clássicos ── */
 function getFavorites() {
   const saved = localStorage.getItem(FAVORITES_KEY);
@@ -118,74 +102,6 @@ function toggleFavorite() {
   localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
   updateFavoriteUI();
   window.dispatchEvent(new CustomEvent('favoritesChanged'));
-}
-
-async function toggleSetlist() {
-  const setlist = getSetlist();
-
-  if (setlist[fileUrl]) {
-    delete setlist[fileUrl];
-    elBtnSetlist.textContent = 'Setlist';
-  } else {
-    elBtnSetlist.textContent = 'Salvando...';
-    try {
-      // Quando salva, garante que temos o conteúdo textual
-      const response = await fetch(fileUrl);
-      const text = await response.text();
-      
-      setlist[fileUrl] = {
-        title: song?.metadata?.title || titleParam,
-        artist: song?.metadata?.artist || artistParam,
-        key: song?.metadata?.key || keyParam,
-        content: text,
-        updatedAt: Date.now()
-      };
-      elBtnSetlist.textContent = 'Remover';
-    } catch (err) {
-      alert('Erro ao baixar música para uso offline. Verifique sua conexão.');
-      elBtnSetlist.textContent = 'Setlist';
-      return;
-    }
-  }
-
-  localStorage.setItem(SETLIST_KEY, JSON.stringify(setlist));
-  window.dispatchEvent(new CustomEvent('setlistChanged'));
-}
-
-function setupSetlistNavigation() {
-  if (originParam !== 'setlist') {
-    elNavSection.style.display = 'none';
-    return;
-  }
-
-  const setlist = getSetlist();
-  const files = Object.keys(setlist);
-  const currentIndex = files.indexOf(fileUrl);
-
-  if (currentIndex === -1) {
-    elNavSection.style.display = 'none';
-    return;
-  }
-
-  elNavSection.style.display = 'flex';
-
-  // Botão Anterior
-  if (currentIndex > 0) {
-    const prevFile = files[currentIndex - 1];
-    elNavPrev.href = `?origin=setlist&file=${encodeURIComponent(prevFile)}&title=${encodeURIComponent(setlist[prevFile].title)}&artist=${encodeURIComponent(setlist[prevFile].artist)}`;
-    elNavPrev.style.visibility = 'visible';
-  } else {
-    elNavPrev.style.visibility = 'hidden';
-  }
-
-  // Botão Próximo
-  if (currentIndex < files.length - 1) {
-    const nextFile = files[currentIndex + 1];
-    elNavNext.href = `?origin=setlist&file=${encodeURIComponent(nextFile)}&title=${encodeURIComponent(setlist[nextFile].title)}&artist=${encodeURIComponent(setlist[nextFile].artist)}`;
-    elNavNext.style.visibility = 'visible';
-  } else {
-    elNavNext.style.visibility = 'hidden';
-  }
 }
 
 /* ── Renderiza metadados do ChordPro ── */
@@ -294,9 +210,6 @@ elBtnDown.addEventListener('click',  () => { transpose--; saveTransposePref(); u
 elTransVal.addEventListener('click', () => { transpose = 0; saveTransposePref(); updateUrlParams(); renderSheet(); });
 elBtnFavorite.addEventListener('click', toggleFavorite);
 
-/* ── Favoritar ── */
-elBtnSetlist.addEventListener('click', toggleSetlist);
-
 /* ── Compartilhar ── */
 elBtnShare.addEventListener('click', async () => {
   // URL injetando o transpose
@@ -338,7 +251,6 @@ elBtnShare.addEventListener('click', async () => {
 function showError(msg) {
   elLoading.style.display  = 'none';
   elContent.style.display  = 'none';
-  elToolbar.style.display  = 'none';
   elError.style.display    = 'block';
   elErrorText.textContent  = msg;
 }
@@ -347,7 +259,6 @@ function showContent() {
   elLoading.style.display = 'none';
   elError.style.display   = 'none';
   elContent.style.display = 'block';
-  elToolbar.style.display = 'block';
 }
 
 function initSong() {
@@ -357,15 +268,12 @@ function initSong() {
   document.title = titleParam + '';
   loadFontPref();
   loadTransposePref();
-  setupSetlistNavigation();
   updateFavoriteUI();
 
   fetch(fileUrl)
     .then(r => r.text())
     .catch(() => {
       // Fallback para localStorage se a rede falhar
-      const setlist = getSetlist();
-      if (setlist[fileUrl]) return setlist[fileUrl].content;
       throw new Error(`Música não encontrada offline. Salve-a no repertório enquanto estiver online.`);
     })
     .then(text => {
@@ -382,12 +290,6 @@ function initSong() {
       renderSheet();
       showContent();
       
-      // Atualiza estado do botão
-      if (isInSetlist()) {
-        elBtnSetlist.textContent = 'Remover'; // remover
-      } else {
-        elBtnSetlist.textContent = 'Setlist'; // salvar
-      }
     })
     .catch(err => showError(err.message));
 }

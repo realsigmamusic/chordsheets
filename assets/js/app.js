@@ -10,14 +10,11 @@
   const songList    = document.getElementById('song-list');
   const favoritesList = document.getElementById('favorites-list');
   const favoritesSection = document.getElementById('favorites-section');
-  const setlistSection = document.getElementById('setlist-section');
-  const setlistList    = document.getElementById('setlist-list');
   const allSongsSection = document.getElementById('all-songs-section');
   const noResults   = document.getElementById('no-results');
   const btnShowAll  = document.getElementById('btn-show-all');
 
   const FAVORITES_KEY = 'chordsheets_favorites';
-  const SETLIST_KEY   = 'chordsheets_setlist';
   const LIMIT_HOME = 5;
 
   function escapeHtml(str) {
@@ -52,85 +49,6 @@
     // Adiciona o parâmetro origin=setlist para ativar a navegação prev/next
     const html = renderCard(song);
     return html.replace('?file=', '?origin=setlist&file=');
-  }
-
-  /* ── Drag-and-drop state ── */
-  let dragSrcFile = null;
-
-  function reorderSetlist(fromFile, toFile) {
-    const saved = localStorage.getItem(SETLIST_KEY);
-    const setlistData = saved ? JSON.parse(saved) : {};
-    const files = Object.keys(setlistData);
-
-    const fromIdx = files.indexOf(fromFile);
-    const toIdx   = files.indexOf(toFile);
-    if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
-
-    // Reconstrói o objeto na nova ordem
-    files.splice(fromIdx, 1);
-    files.splice(toIdx, 0, fromFile);
-
-    const reordered = {};
-    for (const f of files) reordered[f] = setlistData[f];
-
-    localStorage.setItem(SETLIST_KEY, JSON.stringify(reordered));
-    renderSetlistSection();
-    window.dispatchEvent(new CustomEvent('setlistChanged'));
-  }
-
-  function renderSetlistSection() {
-    const saved = localStorage.getItem(SETLIST_KEY);
-    const setlistData = saved ? JSON.parse(saved) : {};
-    const files = Object.keys(setlistData);
-
-    if (files.length === 0) {
-      setlistSection.style.display = 'none';
-      return;
-    }
-
-    setlistSection.style.display = 'block';
-
-    setlistList.innerHTML = files.map(url => {
-      const song = { ...setlistData[url], file: url };
-      // Wrap cada card num container arrastável
-      return '<div class="setlist-drag-item" draggable="true" data-file="' + escapeHtml(url) + '">'
-        + '<span class="drag-handle" title="Arrastar para reordenar">'
-        + '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grip-vertical" viewBox="0 0 16 16">'
-        + '<path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>'
-        + '</svg>'
-        + '</span>'
-        + renderSetlistCard(song)
-        + '</div>';
-    }).join('');
-
-    // Eventos de drag nos itens recém-renderizados
-    setlistList.querySelectorAll('.setlist-drag-item').forEach(item => {
-      item.addEventListener('dragstart', e => {
-        dragSrcFile = item.dataset.file;
-        item.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-      });
-
-      item.addEventListener('dragend', () => {
-        item.classList.remove('dragging');
-        setlistList.querySelectorAll('.setlist-drag-item').forEach(i => i.classList.remove('drag-over'));
-      });
-
-      item.addEventListener('dragover', e => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        setlistList.querySelectorAll('.setlist-drag-item').forEach(i => i.classList.remove('drag-over'));
-        if (item.dataset.file !== dragSrcFile) item.classList.add('drag-over');
-      });
-
-      item.addEventListener('drop', e => {
-        e.preventDefault();
-        if (dragSrcFile && item.dataset.file !== dragSrcFile) {
-          reorderSetlist(dragSrcFile, item.dataset.file);
-        }
-        dragSrcFile = null;
-      });
-    });
   }
 
   function renderFavoritesSection() {
@@ -175,14 +93,10 @@
     const query = searchInput.value.trim();
     if (!query) {
       showingAll = false;
-      renderFavoritesSection();
-      renderSetlistSection();
       renderList(recentSongs, true);
       return;
     }
     showingAll = false;
-    favoritesSection.style.display = 'none';
-    setlistSection.style.display = 'none';
     renderList(fuse.search(query).map(function (r) { return r.item; }), false);
   }
 
@@ -210,7 +124,9 @@
       if (songControls) songControls.style.display = 'none';
       if (songCountLabel) songCountLabel.style.display = 'inline';
       if (navbarBrand) navbarBrand.style.display = 'block';
-      onSearch(); // Garante que a lista (favoritos e recentes) esteja atualizada
+      showTab('inicio');
+      setActiveNav('nav-inicio');
+      onSearch();
     }
   }
 
@@ -248,9 +164,99 @@
     }
   }
 
+  function renderArtistsSection() {
+    const artistsEl = document.getElementById('artists-list');
+    const artists = {};
+
+    allSongs.forEach(s => {
+      if (!s.artist) return;
+      s.artist.split(',').map(a => a.trim()).filter(Boolean).forEach(name => {
+        if (!artists[name]) artists[name] = [];
+        artists[name].push(s);
+      });
+    });
+
+    const sorted = Object.keys(artists).sort((a, b) => a.localeCompare(b));
+
+    artistsEl.innerHTML = sorted.map(artist => {
+      const count = artists[artist].length;
+      return `<div class="artist-item" data-artist="${escapeHtml(artist)}">
+        <span class="artist-name">${escapeHtml(artist)}</span>
+      </div>`;
+    }).join('');
+
+    artistsEl.querySelectorAll('.artist-item').forEach(el => {
+      el.addEventListener('click', () => {
+        renderArtistSongs(el.dataset.artist);
+      });
+    });
+  }
+
+  function renderArtistSongs(artist) {
+    const artistsEl = document.getElementById('artists-list');
+    const songs = allSongs.filter(s => s.artist && s.artist.split(',').map(a => a.trim()).includes(artist));
+
+    artistsEl.innerHTML = `
+      <button class="artist-back-btn" id="artist-back">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+        </svg>
+        Artistas
+      </button>
+      ${songs.map(s => renderCard(s)).join('')}
+    `;
+
+    document.getElementById('artist-back').addEventListener('click', renderArtistsSection);
+  }
+
+  // ── Bottom Nav ──
+  const navItems = document.querySelectorAll('.bottom-nav-item');
+
+  function setActiveNav(id) {
+    navItems.forEach(i => i.classList.remove('active'));
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
+  }
+
+  function showTab(tab) {
+    document.getElementById('search-section').style.display    = tab === 'inicio'    ? 'block' : 'none';
+    document.getElementById('all-songs-section').style.display = tab === 'inicio'    ? 'block' : 'none';
+    document.getElementById('artists-section').style.display   = tab === 'artistas'  ? 'block' : 'none';
+    document.getElementById('favorites-section').style.display = tab === 'favoritos' ? 'block' : 'none';
+    document.getElementById('config-section').style.display    = tab === 'config'    ? 'block' : 'none';
+    document.getElementById('no-results').style.display        = 'none';
+  }
+
+  document.getElementById('nav-inicio').addEventListener('click', () => {
+    window.history.pushState({}, '', '?');
+    syncView();
+  });
+
+  document.getElementById('nav-artistas').addEventListener('click', () => {
+    window.history.pushState({}, '', '?');
+    syncView();
+    setActiveNav('nav-artistas');
+    showTab('artistas');
+    renderArtistsSection();
+  });
+
+  document.getElementById('nav-favoritos').addEventListener('click', () => {
+    window.history.pushState({}, '', '?');
+    syncView();
+    setActiveNav('nav-favoritos');
+    showTab('favoritos');
+    renderFavoritesSection();
+  });
+
+  document.getElementById('nav-config').addEventListener('click', () => {
+    window.history.pushState({}, '', '?');
+    syncView();
+    setActiveNav('nav-config');
+    showTab('config');
+  });
+
   searchInput.addEventListener('input', onSearch);
   btnShowAll.addEventListener('click', onShowAll);
-  window.addEventListener('setlistChanged', onSearch);
   window.addEventListener('favoritesChanged', onSearch);
   window.addEventListener('popstate', syncView);
   init();

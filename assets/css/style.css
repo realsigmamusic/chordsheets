@@ -263,7 +263,7 @@ section button {
 /* ---------- Toolbar (rodapé fixo) ---------- */
 .toolbar {
   position: fixed;
-  bottom: 0;
+  bottom: calc(env(safe-area-inset-bottom) + 3.5rem);
   left: 0;
   right: 0;
   z-index: 100;
@@ -349,4 +349,73 @@ section button {
   padding: 3rem 0;
   color: var(--secondary-text-emphasis);
   font-size: 1rem;
+}
+
+/* ---------- Bottom Nav ---------- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: var(--secondary-bg);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0;
+  gap: 0.2rem;
+  font-size: 0.7rem;
+  color: var(--tertiary-color);
+  cursor: pointer;
+}
+
+.bottom-nav-item.active {
+  color: var(--primary);
+}
+
+/* ---------- Artistas ---------- */
+.artists-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.artist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.5rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.artist-name {
+  font-size: 1.5rem;
+}
+
+.artist-count {
+  font-size: 0.85rem;
+  color: var(--tertiary-color);
+  font-style: italic;
+}
+
+.artist-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1rem;
+  color: var(--primary);
+  padding: 0.5rem 0;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  width: 100%;
 }
