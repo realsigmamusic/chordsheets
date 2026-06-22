@@ -256,6 +256,10 @@ function renderSheet() {
   const transposed = song.transpose(transpose);
   const formatter  = new ChordSheetJS.HtmlDivFormatter();
   elSheet.innerHTML = formatter.format(transposed);
+  elSheet.innerHTML = elSheet.innerHTML.replace(/\.\.\./g, '…');
+  elSheet.querySelectorAll('.chord').forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/ma/gi,'M').replace(/dim/gi,'°');
+  });
 
   elTransVal.textContent = (transpose >= 0 ? '+' : '') + transpose;
 
