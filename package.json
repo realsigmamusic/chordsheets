@@ -1,7 +1,7 @@
 {
-  "name": "chordsheets",
+  "name": "opencifras",
   "version": "1.0.0",
-  "description": "ChordSheets - Cifra builder",
+  "description": "opencifras - Cifra builder",
   "scripts": {
     "build": "node build.js"
   },

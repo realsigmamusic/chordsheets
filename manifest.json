@@ -1,6 +1,6 @@
 {
-	"name": "ChordSheets",
-	"short_name": "ChordSheets",
+	"name": "OpenCifras",
+	"short_name": "OpenCifras",
 	"start_url": "index.html",
 	"display": "standalone",
 	"background_color": "#f8f9fa", 
