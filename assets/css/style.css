@@ -309,50 +309,6 @@ section button {
   border-color: var(--info);
 }
 
-/* ---------- Setlist drag-and-drop ---------- */
-.setlist-drag-item {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  border-radius: var(--border-radius);
-  transition: opacity .15s, background .15s;
-  cursor: default;
-  user-select: none;
-}
-
-.setlist-drag-item .song-item {
-  flex: 1;
-  min-width: 0;
-}
-
-.drag-handle {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 0.25rem;
-  color: var(--tertiary-color);
-  cursor: grab;
-  touch-action: none;
-}
-.drag-handle:active { cursor: grabbing; }
-
-.setlist-drag-item.dragging {
-  opacity: 0.4;
-}
-
-.setlist-drag-item.drag-over {
-  background: var(--tertiary-bg);
-  outline: 2px dashed var(--primary);
-  outline-offset: -2px;
-}
-
-.state-msg {
-  text-align: center;
-  padding: 3rem 0;
-  color: var(--secondary-text-emphasis);
-  font-size: 1rem;
-}
-
 /* ---------- Bottom Nav ---------- */
 .bottom-nav {
   position: fixed;
@@ -399,6 +355,11 @@ section button {
   border-bottom: 1px solid var(--border-color);
 }
 
+.artist-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
 .artist-name {
   font-size: 1.2rem;
 }
@@ -419,4 +380,40 @@ section button {
   margin-bottom: 0.5rem;
   border-bottom: 1px solid var(--border-color);
   width: 100%;
+}
+
+#config-section div {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+#config-section div:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+#config-section h3 {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--body-color);
+  margin-bottom: 0.4rem;
+}
+
+#config-section p {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+#config-section code {
+  background: var(--secondary-bg);
+  padding: 0.1em 0.35em;
+  border-radius: 0.25rem;
+  font-size: 0.85em;
+}
+
+#config-section a {
+  font-size: 0.85rem;
+  color: var(--info-text-emphasis);
 }
