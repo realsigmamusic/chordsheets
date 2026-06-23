@@ -11,11 +11,9 @@ Projetado especificamente para músicos de palco e ministérios de louvor, o apl
 ## Diferenciais
 
 * **Alinhamento Perfeito de Fonte (Sem Quebras):** Ao contrário dos grandes portais de cifras que renderizam o texto de forma rígida em tags `<pre>`, o opencifras processa a cifra estruturalmente em blocos HTML fluidos (`.row`, `.chord`, `.lyrics`). Você pode aumentar ou diminuir a escala da fonte (`A+` / `A-`) e os acordes permanecem milimetricamente fixados sobre a sílaba correta.
-* **Palco Blindado (Setlist Offline Real):** Políticas de cache de navegadores móveis costumam limpar dados repentinamente em inicializações frias (*Cold Starts*) para poupar bateria do celular. O opencifras blinda o repertório: ao adicionar músicas ao seu **Repertório (Setlist)**, o conteúdo textual bruto (`.cho`) é selado diretamente no `localStorage`. Se faltar internet no palco, o método `.catch()` da requisição assume e renderiza tudo instantaneamente da memória do dispositivo.
 * **Transposer Resiliente com URL Viva:** Mude o tom da música instantaneamente através de um círculo de quintas em JavaScript. O tom selecionado é memorizado no dispositivo e anexado via parâmetros diretamente na URL (`?file=...&key=...`), facilitando o compartilhamento da cifra no tom exato com os outros integrantes da banda.
-* **Navegação Contínua no Palco:** Ao abrir uma cifra a partir do seu Repertório, uma barra de navegação flutuante dedicada (`Anterior` / `Próxima`) surge no rodapé. Isso permite transicionar entre as músicas agendadas para aquela noite com um único toque, eliminando a necessidade de retornar à tela inicial.
 * **Busca Avançada com Algoritmo Fuzzy:** Impulsionado pelo `Fuse.js`, a barra de pesquisa executa uma varredura instantânea e profunda cruzando dados de **Título**, **Artista** e trechos da **Letra da música** simultaneamente, ignorando acentos ou erros pequenos de digitação.
-* **UI Dinâmica com DNA Bootstrap:** Interface limpa construída com variáveis CSS nativas (`:root`). Conta com suporte automático a **Modo Claro e Modo Escuro** via sistema (`prefers-color-scheme`), sincronizando inclusive a barra de status do sistema operacional do celular (`theme-color`).
+* **UI Dinâmica:** Interface limpa construída com variáveis CSS nativas (`:root`). Conta com suporte automático a **Modo Claro e Modo Escuro** via sistema (`prefers-color-scheme`), sincronizando inclusive a barra de status do sistema operacional do celular (`theme-color`).
 
 ---
 
